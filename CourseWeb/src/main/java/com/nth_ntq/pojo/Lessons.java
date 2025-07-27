@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
@@ -30,48 +31,62 @@ import java.util.Set;
 @Table(name = "lessons")
 @NamedQueries({
     @NamedQuery(name = "Lessons.findAll", query = "SELECT l FROM Lessons l"),
-    @NamedQuery(name = "Lessons.findById", query = "SELECT l FROM Lessons l WHERE l.id = :id"),
-    @NamedQuery(name = "Lessons.findByTitle", query = "SELECT l FROM Lessons l WHERE l.title = :title")})
+    @NamedQuery(name = "Lessons.findByLessonId", query = "SELECT l FROM Lessons l WHERE l.lessonId = :lessonId"),
+    @NamedQuery(name = "Lessons.findByTitle", query = "SELECT l FROM Lessons l WHERE l.title = :title"),
+    @NamedQuery(name = "Lessons.findByVideoUrl", query = "SELECT l FROM Lessons l WHERE l.videoUrl = :videoUrl"),
+    @NamedQuery(name = "Lessons.findByOrderIndex", query = "SELECT l FROM Lessons l WHERE l.orderIndex = :orderIndex"),
+    @NamedQuery(name = "Lessons.findByIsPreview", query = "SELECT l FROM Lessons l WHERE l.isPreview = :isPreview")})
 public class Lessons implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "lesson_id")
+    private Long lessonId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 120)
+    @Size(min = 1, max = 255)
     @Column(name = "title")
     private String title;
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "content")
+    private String content;
+    @Size(max = 500)
+    @Column(name = "video_url")
+    private String videoUrl;
+    @Column(name = "order_index")
+    private Integer orderIndex;
+    @Column(name = "is_preview")
+    private Boolean isPreview;
     @JoinTable(name = "lesson_assessment", joinColumns = {
-        @JoinColumn(name = "lesson_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "assessment_id", referencedColumnName = "id")})
+        @JoinColumn(name = "lesson_id", referencedColumnName = "lesson_id")}, inverseJoinColumns = {
+        @JoinColumn(name = "assessment_id", referencedColumnName = "assessment_id")})
     @ManyToMany
     private Set<Assessments> assessmentsSet;
-    @JoinColumn(name = "course_id", referencedColumnName = "id")
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @ManyToOne(optional = false)
     private Courses courseId;
 
     public Lessons() {
     }
 
-    public Lessons(Long id) {
-        this.id = id;
+    public Lessons(Long lessonId) {
+        this.lessonId = lessonId;
     }
 
-    public Lessons(Long id, String title) {
-        this.id = id;
+    public Lessons(Long lessonId, String title) {
+        this.lessonId = lessonId;
         this.title = title;
     }
 
-    public Long getId() {
-        return id;
+    public Long getLessonId() {
+        return lessonId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setLessonId(Long lessonId) {
+        this.lessonId = lessonId;
     }
 
     public String getTitle() {
@@ -80,6 +95,38 @@ public class Lessons implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public Integer getOrderIndex() {
+        return orderIndex;
+    }
+
+    public void setOrderIndex(Integer orderIndex) {
+        this.orderIndex = orderIndex;
+    }
+
+    public Boolean getIsPreview() {
+        return isPreview;
+    }
+
+    public void setIsPreview(Boolean isPreview) {
+        this.isPreview = isPreview;
     }
 
     public Set<Assessments> getAssessmentsSet() {
@@ -101,7 +148,7 @@ public class Lessons implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (lessonId != null ? lessonId.hashCode() : 0);
         return hash;
     }
 
@@ -112,7 +159,7 @@ public class Lessons implements Serializable {
             return false;
         }
         Lessons other = (Lessons) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.lessonId == null && other.lessonId != null) || (this.lessonId != null && !this.lessonId.equals(other.lessonId))) {
             return false;
         }
         return true;
@@ -120,7 +167,7 @@ public class Lessons implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.Lessons[ id=" + id + " ]";
+        return "com.nth_ntq.pojo.Lessons[ lessonId=" + lessonId + " ]";
     }
     
 }

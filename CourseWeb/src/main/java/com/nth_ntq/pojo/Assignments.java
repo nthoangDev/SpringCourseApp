@@ -13,8 +13,11 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -24,32 +27,44 @@ import java.io.Serializable;
 @Table(name = "assignments")
 @NamedQueries({
     @NamedQuery(name = "Assignments.findAll", query = "SELECT a FROM Assignments a"),
-    @NamedQuery(name = "Assignments.findById", query = "SELECT a FROM Assignments a WHERE a.id = :id")})
+    @NamedQuery(name = "Assignments.findByAssignmentId", query = "SELECT a FROM Assignments a WHERE a.assignmentId = :assignmentId"),
+    @NamedQuery(name = "Assignments.findByDueDate", query = "SELECT a FROM Assignments a WHERE a.dueDate = :dueDate")})
 public class Assignments implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id")
-    private Long id;
-    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    @Column(name = "assignment_id")
+    private Long assignmentId;
+    @Column(name = "due_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dueDate;
+    @JoinColumn(name = "assignment_id", referencedColumnName = "assessment_id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Assessments assessments;
 
     public Assignments() {
     }
 
-    public Assignments(Long id) {
-        this.id = id;
+    public Assignments(Long assignmentId) {
+        this.assignmentId = assignmentId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getAssignmentId() {
+        return assignmentId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAssignmentId(Long assignmentId) {
+        this.assignmentId = assignmentId;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
     }
 
     public Assessments getAssessments() {
@@ -63,7 +78,7 @@ public class Assignments implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (assignmentId != null ? assignmentId.hashCode() : 0);
         return hash;
     }
 
@@ -74,7 +89,7 @@ public class Assignments implements Serializable {
             return false;
         }
         Assignments other = (Assignments) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.assignmentId == null && other.assignmentId != null) || (this.assignmentId != null && !this.assignmentId.equals(other.assignmentId))) {
             return false;
         }
         return true;
@@ -82,7 +97,7 @@ public class Assignments implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.Assignments[ id=" + id + " ]";
+        return "com.nth_ntq.pojo.Assignments[ assignmentId=" + assignmentId + " ]";
     }
     
 }

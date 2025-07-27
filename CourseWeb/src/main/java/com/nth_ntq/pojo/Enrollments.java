@@ -15,7 +15,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *
@@ -25,38 +29,73 @@ import java.io.Serializable;
 @Table(name = "enrollments")
 @NamedQueries({
     @NamedQuery(name = "Enrollments.findAll", query = "SELECT e FROM Enrollments e"),
-    @NamedQuery(name = "Enrollments.findById", query = "SELECT e FROM Enrollments e WHERE e.id = :id")})
+    @NamedQuery(name = "Enrollments.findByEnrollmentId", query = "SELECT e FROM Enrollments e WHERE e.enrollmentId = :enrollmentId"),
+    @NamedQuery(name = "Enrollments.findByProgress", query = "SELECT e FROM Enrollments e WHERE e.progress = :progress"),
+    @NamedQuery(name = "Enrollments.findByCompleted", query = "SELECT e FROM Enrollments e WHERE e.completed = :completed"),
+    @NamedQuery(name = "Enrollments.findByEnrolledAt", query = "SELECT e FROM Enrollments e WHERE e.enrolledAt = :enrolledAt")})
 public class Enrollments implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Long id;
-    @JoinColumn(name = "course_id", referencedColumnName = "id")
+    @Column(name = "enrollment_id")
+    private Long enrollmentId;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "progress")
+    private BigDecimal progress;
+    @Column(name = "completed")
+    private Boolean completed;
+    @Column(name = "enrolled_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date enrolledAt;
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @ManyToOne(optional = false)
     private Courses courseId;
-    @JoinColumn(name = "payment_id", referencedColumnName = "id")
+    @JoinColumn(name = "payment_id", referencedColumnName = "payment_id")
     @ManyToOne
     private Payments paymentId;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
     private Users userId;
 
     public Enrollments() {
     }
 
-    public Enrollments(Long id) {
-        this.id = id;
+    public Enrollments(Long enrollmentId) {
+        this.enrollmentId = enrollmentId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getEnrollmentId() {
+        return enrollmentId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setEnrollmentId(Long enrollmentId) {
+        this.enrollmentId = enrollmentId;
+    }
+
+    public BigDecimal getProgress() {
+        return progress;
+    }
+
+    public void setProgress(BigDecimal progress) {
+        this.progress = progress;
+    }
+
+    public Boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
+
+    public Date getEnrolledAt() {
+        return enrolledAt;
+    }
+
+    public void setEnrolledAt(Date enrolledAt) {
+        this.enrolledAt = enrolledAt;
     }
 
     public Courses getCourseId() {
@@ -86,7 +125,7 @@ public class Enrollments implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (enrollmentId != null ? enrollmentId.hashCode() : 0);
         return hash;
     }
 
@@ -97,7 +136,7 @@ public class Enrollments implements Serializable {
             return false;
         }
         Enrollments other = (Enrollments) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.enrollmentId == null && other.enrollmentId != null) || (this.enrollmentId != null && !this.enrollmentId.equals(other.enrollmentId))) {
             return false;
         }
         return true;
@@ -105,7 +144,7 @@ public class Enrollments implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.Enrollments[ id=" + id + " ]";
+        return "com.nth_ntq.pojo.Enrollments[ enrollmentId=" + enrollmentId + " ]";
     }
     
 }

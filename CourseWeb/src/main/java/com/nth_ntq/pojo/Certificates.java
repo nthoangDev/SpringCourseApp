@@ -15,7 +15,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -25,35 +29,59 @@ import java.io.Serializable;
 @Table(name = "certificates")
 @NamedQueries({
     @NamedQuery(name = "Certificates.findAll", query = "SELECT c FROM Certificates c"),
-    @NamedQuery(name = "Certificates.findById", query = "SELECT c FROM Certificates c WHERE c.id = :id")})
+    @NamedQuery(name = "Certificates.findByCertificateId", query = "SELECT c FROM Certificates c WHERE c.certificateId = :certificateId"),
+    @NamedQuery(name = "Certificates.findByCertificateUrl", query = "SELECT c FROM Certificates c WHERE c.certificateUrl = :certificateUrl"),
+    @NamedQuery(name = "Certificates.findByIssuedAt", query = "SELECT c FROM Certificates c WHERE c.issuedAt = :issuedAt")})
 public class Certificates implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Long id;
-    @JoinColumn(name = "course_id", referencedColumnName = "id")
+    @Column(name = "certificate_id")
+    private Long certificateId;
+    @Size(max = 500)
+    @Column(name = "certificate_url")
+    private String certificateUrl;
+    @Column(name = "issued_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date issuedAt;
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @ManyToOne(optional = false)
     private Courses courseId;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
     private Users userId;
 
     public Certificates() {
     }
 
-    public Certificates(Long id) {
-        this.id = id;
+    public Certificates(Long certificateId) {
+        this.certificateId = certificateId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getCertificateId() {
+        return certificateId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCertificateId(Long certificateId) {
+        this.certificateId = certificateId;
+    }
+
+    public String getCertificateUrl() {
+        return certificateUrl;
+    }
+
+    public void setCertificateUrl(String certificateUrl) {
+        this.certificateUrl = certificateUrl;
+    }
+
+    public Date getIssuedAt() {
+        return issuedAt;
+    }
+
+    public void setIssuedAt(Date issuedAt) {
+        this.issuedAt = issuedAt;
     }
 
     public Courses getCourseId() {
@@ -75,7 +103,7 @@ public class Certificates implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (certificateId != null ? certificateId.hashCode() : 0);
         return hash;
     }
 
@@ -86,7 +114,7 @@ public class Certificates implements Serializable {
             return false;
         }
         Certificates other = (Certificates) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.certificateId == null && other.certificateId != null) || (this.certificateId != null && !this.certificateId.equals(other.certificateId))) {
             return false;
         }
         return true;
@@ -94,7 +122,7 @@ public class Certificates implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.Certificates[ id=" + id + " ]";
+        return "com.nth_ntq.pojo.Certificates[ certificateId=" + certificateId + " ]";
     }
     
 }

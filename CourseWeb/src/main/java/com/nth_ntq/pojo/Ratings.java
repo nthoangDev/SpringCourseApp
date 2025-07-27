@@ -15,8 +15,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -26,53 +29,65 @@ import java.io.Serializable;
 @Table(name = "ratings")
 @NamedQueries({
     @NamedQuery(name = "Ratings.findAll", query = "SELECT r FROM Ratings r"),
-    @NamedQuery(name = "Ratings.findById", query = "SELECT r FROM Ratings r WHERE r.id = :id"),
-    @NamedQuery(name = "Ratings.findByScore", query = "SELECT r FROM Ratings r WHERE r.score = :score")})
+    @NamedQuery(name = "Ratings.findByRatingId", query = "SELECT r FROM Ratings r WHERE r.ratingId = :ratingId"),
+    @NamedQuery(name = "Ratings.findByRating", query = "SELECT r FROM Ratings r WHERE r.rating = :rating"),
+    @NamedQuery(name = "Ratings.findByCreatedAt", query = "SELECT r FROM Ratings r WHERE r.createdAt = :createdAt")})
 public class Ratings implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "rating_id")
+    private Long ratingId;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "score")
-    private short score;
-    @JoinColumn(name = "course_id", referencedColumnName = "id")
+    @Column(name = "rating")
+    private short rating;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @ManyToOne(optional = false)
     private Courses courseId;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
     private Users userId;
 
     public Ratings() {
     }
 
-    public Ratings(Long id) {
-        this.id = id;
+    public Ratings(Long ratingId) {
+        this.ratingId = ratingId;
     }
 
-    public Ratings(Long id, short score) {
-        this.id = id;
-        this.score = score;
+    public Ratings(Long ratingId, short rating) {
+        this.ratingId = ratingId;
+        this.rating = rating;
     }
 
-    public Long getId() {
-        return id;
+    public Long getRatingId() {
+        return ratingId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRatingId(Long ratingId) {
+        this.ratingId = ratingId;
     }
 
-    public short getScore() {
-        return score;
+    public short getRating() {
+        return rating;
     }
 
-    public void setScore(short score) {
-        this.score = score;
+    public void setRating(short rating) {
+        this.rating = rating;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Courses getCourseId() {
@@ -94,7 +109,7 @@ public class Ratings implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (ratingId != null ? ratingId.hashCode() : 0);
         return hash;
     }
 
@@ -105,7 +120,7 @@ public class Ratings implements Serializable {
             return false;
         }
         Ratings other = (Ratings) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.ratingId == null && other.ratingId != null) || (this.ratingId != null && !this.ratingId.equals(other.ratingId))) {
             return false;
         }
         return true;
@@ -113,7 +128,7 @@ public class Ratings implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.Ratings[ id=" + id + " ]";
+        return "com.nth_ntq.pojo.Ratings[ ratingId=" + ratingId + " ]";
     }
     
 }

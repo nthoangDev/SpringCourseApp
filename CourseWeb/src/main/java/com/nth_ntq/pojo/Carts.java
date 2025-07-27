@@ -17,7 +17,10 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -28,34 +31,46 @@ import java.util.Set;
 @Table(name = "carts")
 @NamedQueries({
     @NamedQuery(name = "Carts.findAll", query = "SELECT c FROM Carts c"),
-    @NamedQuery(name = "Carts.findById", query = "SELECT c FROM Carts c WHERE c.id = :id")})
+    @NamedQuery(name = "Carts.findByCartId", query = "SELECT c FROM Carts c WHERE c.cartId = :cartId"),
+    @NamedQuery(name = "Carts.findByCreatedAt", query = "SELECT c FROM Carts c WHERE c.createdAt = :createdAt")})
 public class Carts implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "cart_id")
+    private Long cartId;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartId")
     private Set<CartItems> cartItemsSet;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @OneToOne(optional = false)
     private Users userId;
 
     public Carts() {
     }
 
-    public Carts(Long id) {
-        this.id = id;
+    public Carts(Long cartId) {
+        this.cartId = cartId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getCartId() {
+        return cartId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCartId(Long cartId) {
+        this.cartId = cartId;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Set<CartItems> getCartItemsSet() {
@@ -77,7 +92,7 @@ public class Carts implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (cartId != null ? cartId.hashCode() : 0);
         return hash;
     }
 
@@ -88,7 +103,7 @@ public class Carts implements Serializable {
             return false;
         }
         Carts other = (Carts) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.cartId == null && other.cartId != null) || (this.cartId != null && !this.cartId.equals(other.cartId))) {
             return false;
         }
         return true;
@@ -96,7 +111,7 @@ public class Carts implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.Carts[ id=" + id + " ]";
+        return "com.nth_ntq.pojo.Carts[ cartId=" + cartId + " ]";
     }
     
 }

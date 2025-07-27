@@ -27,7 +27,7 @@ import java.util.Set;
 @Table(name = "tags")
 @NamedQueries({
     @NamedQuery(name = "Tags.findAll", query = "SELECT t FROM Tags t"),
-    @NamedQuery(name = "Tags.findById", query = "SELECT t FROM Tags t WHERE t.id = :id"),
+    @NamedQuery(name = "Tags.findByTagId", query = "SELECT t FROM Tags t WHERE t.tagId = :tagId"),
     @NamedQuery(name = "Tags.findByName", query = "SELECT t FROM Tags t WHERE t.name = :name")})
 public class Tags implements Serializable {
 
@@ -35,11 +35,11 @@ public class Tags implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "tag_id")
+    private Long tagId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 80)
+    @Size(min = 1, max = 100)
     @Column(name = "name")
     private String name;
     @ManyToMany(mappedBy = "tagsSet")
@@ -48,21 +48,21 @@ public class Tags implements Serializable {
     public Tags() {
     }
 
-    public Tags(Long id) {
-        this.id = id;
+    public Tags(Long tagId) {
+        this.tagId = tagId;
     }
 
-    public Tags(Long id, String name) {
-        this.id = id;
+    public Tags(Long tagId, String name) {
+        this.tagId = tagId;
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
+    public Long getTagId() {
+        return tagId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTagId(Long tagId) {
+        this.tagId = tagId;
     }
 
     public String getName() {
@@ -84,7 +84,7 @@ public class Tags implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (tagId != null ? tagId.hashCode() : 0);
         return hash;
     }
 
@@ -95,7 +95,7 @@ public class Tags implements Serializable {
             return false;
         }
         Tags other = (Tags) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.tagId == null && other.tagId != null) || (this.tagId != null && !this.tagId.equals(other.tagId))) {
             return false;
         }
         return true;
@@ -103,7 +103,7 @@ public class Tags implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.Tags[ id=" + id + " ]";
+        return "com.nth_ntq.pojo.Tags[ tagId=" + tagId + " ]";
     }
     
 }

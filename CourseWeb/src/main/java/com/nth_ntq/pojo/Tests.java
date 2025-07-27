@@ -24,32 +24,43 @@ import java.io.Serializable;
 @Table(name = "tests")
 @NamedQueries({
     @NamedQuery(name = "Tests.findAll", query = "SELECT t FROM Tests t"),
-    @NamedQuery(name = "Tests.findById", query = "SELECT t FROM Tests t WHERE t.id = :id")})
+    @NamedQuery(name = "Tests.findByTestId", query = "SELECT t FROM Tests t WHERE t.testId = :testId"),
+    @NamedQuery(name = "Tests.findByDurationMinutes", query = "SELECT t FROM Tests t WHERE t.durationMinutes = :durationMinutes")})
 public class Tests implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id")
-    private Long id;
-    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    @Column(name = "test_id")
+    private Long testId;
+    @Column(name = "duration_minutes")
+    private Integer durationMinutes;
+    @JoinColumn(name = "test_id", referencedColumnName = "assessment_id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Assessments assessments;
 
     public Tests() {
     }
 
-    public Tests(Long id) {
-        this.id = id;
+    public Tests(Long testId) {
+        this.testId = testId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getTestId() {
+        return testId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTestId(Long testId) {
+        this.testId = testId;
+    }
+
+    public Integer getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(Integer durationMinutes) {
+        this.durationMinutes = durationMinutes;
     }
 
     public Assessments getAssessments() {
@@ -63,7 +74,7 @@ public class Tests implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (testId != null ? testId.hashCode() : 0);
         return hash;
     }
 
@@ -74,7 +85,7 @@ public class Tests implements Serializable {
             return false;
         }
         Tests other = (Tests) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.testId == null && other.testId != null) || (this.testId != null && !this.testId.equals(other.testId))) {
             return false;
         }
         return true;
@@ -82,7 +93,7 @@ public class Tests implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.Tests[ id=" + id + " ]";
+        return "com.nth_ntq.pojo.Tests[ testId=" + testId + " ]";
     }
     
 }

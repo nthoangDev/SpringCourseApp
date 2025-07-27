@@ -13,14 +13,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -31,29 +36,59 @@ import java.util.Set;
 @Table(name = "courses")
 @NamedQueries({
     @NamedQuery(name = "Courses.findAll", query = "SELECT c FROM Courses c"),
-    @NamedQuery(name = "Courses.findById", query = "SELECT c FROM Courses c WHERE c.id = :id"),
-    @NamedQuery(name = "Courses.findByTitle", query = "SELECT c FROM Courses c WHERE c.title = :title")})
+    @NamedQuery(name = "Courses.findByCourseId", query = "SELECT c FROM Courses c WHERE c.courseId = :courseId"),
+    @NamedQuery(name = "Courses.findByTitle", query = "SELECT c FROM Courses c WHERE c.title = :title"),
+    @NamedQuery(name = "Courses.findByImageUrl", query = "SELECT c FROM Courses c WHERE c.imageUrl = :imageUrl"),
+    @NamedQuery(name = "Courses.findByLevel", query = "SELECT c FROM Courses c WHERE c.level = :level"),
+    @NamedQuery(name = "Courses.findByPrice", query = "SELECT c FROM Courses c WHERE c.price = :price"),
+    @NamedQuery(name = "Courses.findByDuration", query = "SELECT c FROM Courses c WHERE c.duration = :duration"),
+    @NamedQuery(name = "Courses.findByStatus", query = "SELECT c FROM Courses c WHERE c.status = :status"),
+    @NamedQuery(name = "Courses.findByDeleted", query = "SELECT c FROM Courses c WHERE c.deleted = :deleted"),
+    @NamedQuery(name = "Courses.findByCreatedAt", query = "SELECT c FROM Courses c WHERE c.createdAt = :createdAt")})
 public class Courses implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "course_id")
+    private Long courseId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 120)
+    @Size(min = 1, max = 255)
     @Column(name = "title")
     private String title;
-    @JoinTable(name = "course_teacher", joinColumns = {
-        @JoinColumn(name = "course_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "user_id", referencedColumnName = "id")})
-    @ManyToMany
-    private Set<Users> usersSet;
-    @JoinTable(name = "course_tag", joinColumns = {
-        @JoinColumn(name = "course_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "tag_id", referencedColumnName = "id")})
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "description")
+    private String description;
+    @Size(max = 500)
+    @Column(name = "image_url")
+    private String imageUrl;
+    @Size(max = 12)
+    @Column(name = "level")
+    private String level;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "price")
+    private BigDecimal price;
+    @Size(max = 50)
+    @Column(name = "duration")
+    private String duration;
+    @Size(max = 8)
+    @Column(name = "status")
+    private String status;
+    @Column(name = "deleted")
+    private Boolean deleted;
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "instructor_note")
+    private String instructorNote;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    @JoinTable(name = "course_tags", joinColumns = {
+        @JoinColumn(name = "course_id", referencedColumnName = "course_id")}, inverseJoinColumns = {
+        @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")})
     @ManyToMany
     private Set<Tags> tagsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
@@ -65,10 +100,12 @@ public class Courses implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
     private Set<Enrollments> enrollmentsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    private Set<CourseTeachers> courseTeachersSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
     private Set<Certificates> certificatesSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
     private Set<Ratings> ratingsSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    @OneToMany(mappedBy = "courseId")
     private Set<Notifications> notificationsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
     private Set<Lessons> lessonsSet;
@@ -78,21 +115,21 @@ public class Courses implements Serializable {
     public Courses() {
     }
 
-    public Courses(Long id) {
-        this.id = id;
+    public Courses(Long courseId) {
+        this.courseId = courseId;
     }
 
-    public Courses(Long id, String title) {
-        this.id = id;
+    public Courses(Long courseId, String title) {
+        this.courseId = courseId;
         this.title = title;
     }
 
-    public Long getId() {
-        return id;
+    public Long getCourseId() {
+        return courseId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
     public String getTitle() {
@@ -103,12 +140,76 @@ public class Courses implements Serializable {
         this.title = title;
     }
 
-    public Set<Users> getUsersSet() {
-        return usersSet;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUsersSet(Set<Users> usersSet) {
-        this.usersSet = usersSet;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public String getInstructorNote() {
+        return instructorNote;
+    }
+
+    public void setInstructorNote(String instructorNote) {
+        this.instructorNote = instructorNote;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Set<Tags> getTagsSet() {
@@ -149,6 +250,14 @@ public class Courses implements Serializable {
 
     public void setEnrollmentsSet(Set<Enrollments> enrollmentsSet) {
         this.enrollmentsSet = enrollmentsSet;
+    }
+
+    public Set<CourseTeachers> getCourseTeachersSet() {
+        return courseTeachersSet;
+    }
+
+    public void setCourseTeachersSet(Set<CourseTeachers> courseTeachersSet) {
+        this.courseTeachersSet = courseTeachersSet;
     }
 
     public Set<Certificates> getCertificatesSet() {
@@ -194,7 +303,7 @@ public class Courses implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (courseId != null ? courseId.hashCode() : 0);
         return hash;
     }
 
@@ -205,7 +314,7 @@ public class Courses implements Serializable {
             return false;
         }
         Courses other = (Courses) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.courseId == null && other.courseId != null) || (this.courseId != null && !this.courseId.equals(other.courseId))) {
             return false;
         }
         return true;
@@ -213,7 +322,7 @@ public class Courses implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.Courses[ id=" + id + " ]";
+        return "com.nth_ntq.pojo.Courses[ courseId=" + courseId + " ]";
     }
     
 }

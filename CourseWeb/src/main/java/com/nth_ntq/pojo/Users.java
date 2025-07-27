@@ -11,17 +11,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -32,51 +32,64 @@ import java.util.Set;
 @Table(name = "users")
 @NamedQueries({
     @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
-    @NamedQuery(name = "Users.findById", query = "SELECT u FROM Users u WHERE u.id = :id"),
+    @NamedQuery(name = "Users.findByUserId", query = "SELECT u FROM Users u WHERE u.userId = :userId"),
     @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
-    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
     @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
-    @NamedQuery(name = "Users.findByAvatar", query = "SELECT u FROM Users u WHERE u.avatar = :avatar")})
+    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
+    @NamedQuery(name = "Users.findByFullName", query = "SELECT u FROM Users u WHERE u.fullName = :fullName"),
+    @NamedQuery(name = "Users.findByAvatarUrl", query = "SELECT u FROM Users u WHERE u.avatarUrl = :avatarUrl"),
+    @NamedQuery(name = "Users.findByRole", query = "SELECT u FROM Users u WHERE u.role = :role"),
+    @NamedQuery(name = "Users.findByStatus", query = "SELECT u FROM Users u WHERE u.status = :status"),
+    @NamedQuery(name = "Users.findByCreatedAt", query = "SELECT u FROM Users u WHERE u.createdAt = :createdAt")})
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "user_id")
+    private Long userId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 255)
     @Column(name = "username")
     private String username;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "email")
+    private String email;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "password")
     private String password;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 120)
-    @Column(name = "email")
-    private String email;
     @Size(max = 255)
-    @Column(name = "avatar")
-    private String avatar;
-    @ManyToMany(mappedBy = "usersSet")
-    private Set<Courses> coursesSet;
-    @JoinTable(name = "assessment_results", joinColumns = {
-        @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "assessment_id", referencedColumnName = "id")})
-    @ManyToMany
-    private Set<Assessments> assessmentsSet;
+    @Column(name = "full_name")
+    private String fullName;
+    @Size(max = 500)
+    @Column(name = "avatar_url")
+    private String avatarUrl;
+    @Size(max = 7)
+    @Column(name = "role")
+    private String role;
+    @Size(max = 8)
+    @Column(name = "status")
+    private String status;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Comments> commentsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Payments> paymentsSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    private Set<AssessmentResults> assessmentResultsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Enrollments> enrollmentsSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Set<CourseTeachers> courseTeachersSet;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "userId")
     private Carts carts;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
@@ -91,23 +104,23 @@ public class Users implements Serializable {
     public Users() {
     }
 
-    public Users(Long id) {
-        this.id = id;
+    public Users(Long userId) {
+        this.userId = userId;
     }
 
-    public Users(Long id, String username, String password, String email) {
-        this.id = id;
+    public Users(Long userId, String username, String email, String password) {
+        this.userId = userId;
         this.username = username;
-        this.password = password;
         this.email = email;
+        this.password = password;
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -118,14 +131,6 @@ public class Users implements Serializable {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -134,28 +139,52 @@ public class Users implements Serializable {
         this.email = email;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public Set<Courses> getCoursesSet() {
-        return coursesSet;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setCoursesSet(Set<Courses> coursesSet) {
-        this.coursesSet = coursesSet;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public Set<Assessments> getAssessmentsSet() {
-        return assessmentsSet;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setAssessmentsSet(Set<Assessments> assessmentsSet) {
-        this.assessmentsSet = assessmentsSet;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Set<Comments> getCommentsSet() {
@@ -174,12 +203,28 @@ public class Users implements Serializable {
         this.paymentsSet = paymentsSet;
     }
 
+    public Set<AssessmentResults> getAssessmentResultsSet() {
+        return assessmentResultsSet;
+    }
+
+    public void setAssessmentResultsSet(Set<AssessmentResults> assessmentResultsSet) {
+        this.assessmentResultsSet = assessmentResultsSet;
+    }
+
     public Set<Enrollments> getEnrollmentsSet() {
         return enrollmentsSet;
     }
 
     public void setEnrollmentsSet(Set<Enrollments> enrollmentsSet) {
         this.enrollmentsSet = enrollmentsSet;
+    }
+
+    public Set<CourseTeachers> getCourseTeachersSet() {
+        return courseTeachersSet;
+    }
+
+    public void setCourseTeachersSet(Set<CourseTeachers> courseTeachersSet) {
+        this.courseTeachersSet = courseTeachersSet;
     }
 
     public Carts getCarts() {
@@ -225,7 +270,7 @@ public class Users implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (userId != null ? userId.hashCode() : 0);
         return hash;
     }
 
@@ -236,7 +281,7 @@ public class Users implements Serializable {
             return false;
         }
         Users other = (Users) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;
@@ -244,7 +289,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.Users[ id=" + id + " ]";
+        return "com.nth_ntq.pojo.Users[ userId=" + userId + " ]";
     }
     
 }

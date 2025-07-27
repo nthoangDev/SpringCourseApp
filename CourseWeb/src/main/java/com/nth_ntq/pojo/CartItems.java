@@ -15,7 +15,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -25,38 +28,61 @@ import java.io.Serializable;
 @Table(name = "cart_items")
 @NamedQueries({
     @NamedQuery(name = "CartItems.findAll", query = "SELECT c FROM CartItems c"),
-    @NamedQuery(name = "CartItems.findById", query = "SELECT c FROM CartItems c WHERE c.id = :id")})
+    @NamedQuery(name = "CartItems.findByCartItemId", query = "SELECT c FROM CartItems c WHERE c.cartItemId = :cartItemId"),
+    @NamedQuery(name = "CartItems.findByQuantity", query = "SELECT c FROM CartItems c WHERE c.quantity = :quantity"),
+    @NamedQuery(name = "CartItems.findByAddedAt", query = "SELECT c FROM CartItems c WHERE c.addedAt = :addedAt")})
 public class CartItems implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Long id;
-    @JoinColumn(name = "cart_id", referencedColumnName = "id")
+    @Column(name = "cart_item_id")
+    private Long cartItemId;
+    @Column(name = "quantity")
+    private Integer quantity;
+    @Column(name = "added_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date addedAt;
+    @JoinColumn(name = "cart_id", referencedColumnName = "cart_id")
     @ManyToOne(optional = false)
     private Carts cartId;
-    @JoinColumn(name = "course_id", referencedColumnName = "id")
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @ManyToOne(optional = false)
     private Courses courseId;
-    @JoinColumn(name = "payment_id", referencedColumnName = "id")
+    @JoinColumn(name = "payment_id", referencedColumnName = "payment_id")
     @ManyToOne
     private Payments paymentId;
 
     public CartItems() {
     }
 
-    public CartItems(Long id) {
-        this.id = id;
+    public CartItems(Long cartItemId) {
+        this.cartItemId = cartItemId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getCartItemId() {
+        return cartItemId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCartItemId(Long cartItemId) {
+        this.cartItemId = cartItemId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Date getAddedAt() {
+        return addedAt;
+    }
+
+    public void setAddedAt(Date addedAt) {
+        this.addedAt = addedAt;
     }
 
     public Carts getCartId() {
@@ -86,7 +112,7 @@ public class CartItems implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (cartItemId != null ? cartItemId.hashCode() : 0);
         return hash;
     }
 
@@ -97,7 +123,7 @@ public class CartItems implements Serializable {
             return false;
         }
         CartItems other = (CartItems) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.cartItemId == null && other.cartItemId != null) || (this.cartItemId != null && !this.cartItemId.equals(other.cartItemId))) {
             return false;
         }
         return true;
@@ -105,7 +131,7 @@ public class CartItems implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.CartItems[ id=" + id + " ]";
+        return "com.nth_ntq.pojo.CartItems[ cartItemId=" + cartItemId + " ]";
     }
     
 }

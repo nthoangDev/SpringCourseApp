@@ -18,5 +18,7 @@
     <class>com.nth_ntq.pojo.Certificates</class>
     <class>com.nth_ntq.pojo.Assignments</class>
     <class>com.nth_ntq.pojo.Notifications</class>
+    <class>com.nth_ntq.pojo.CourseTeachers</class>
+    <class>com.nth_ntq.pojo.AssessmentResults</class>
   </persistence-unit>
 </persistence>

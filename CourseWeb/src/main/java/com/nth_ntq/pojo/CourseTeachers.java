@@ -15,32 +15,30 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  *
  * @author pc
  */
 @Entity
-@Table(name = "likes")
+@Table(name = "course_teachers")
 @NamedQueries({
-    @NamedQuery(name = "Likes.findAll", query = "SELECT l FROM Likes l"),
-    @NamedQuery(name = "Likes.findByLikeId", query = "SELECT l FROM Likes l WHERE l.likeId = :likeId"),
-    @NamedQuery(name = "Likes.findByCreatedAt", query = "SELECT l FROM Likes l WHERE l.createdAt = :createdAt")})
-public class Likes implements Serializable {
+    @NamedQuery(name = "CourseTeachers.findAll", query = "SELECT c FROM CourseTeachers c"),
+    @NamedQuery(name = "CourseTeachers.findByCourseTeacherId", query = "SELECT c FROM CourseTeachers c WHERE c.courseTeacherId = :courseTeacherId"),
+    @NamedQuery(name = "CourseTeachers.findByRoleDesc", query = "SELECT c FROM CourseTeachers c WHERE c.roleDesc = :roleDesc")})
+public class CourseTeachers implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "like_id")
-    private Long likeId;
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    @Column(name = "course_teacher_id")
+    private Long courseTeacherId;
+    @Size(max = 100)
+    @Column(name = "role_desc")
+    private String roleDesc;
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @ManyToOne(optional = false)
     private Courses courseId;
@@ -48,27 +46,27 @@ public class Likes implements Serializable {
     @ManyToOne(optional = false)
     private Users userId;
 
-    public Likes() {
+    public CourseTeachers() {
     }
 
-    public Likes(Long likeId) {
-        this.likeId = likeId;
+    public CourseTeachers(Long courseTeacherId) {
+        this.courseTeacherId = courseTeacherId;
     }
 
-    public Long getLikeId() {
-        return likeId;
+    public Long getCourseTeacherId() {
+        return courseTeacherId;
     }
 
-    public void setLikeId(Long likeId) {
-        this.likeId = likeId;
+    public void setCourseTeacherId(Long courseTeacherId) {
+        this.courseTeacherId = courseTeacherId;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public String getRoleDesc() {
+        return roleDesc;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setRoleDesc(String roleDesc) {
+        this.roleDesc = roleDesc;
     }
 
     public Courses getCourseId() {
@@ -90,18 +88,18 @@ public class Likes implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (likeId != null ? likeId.hashCode() : 0);
+        hash += (courseTeacherId != null ? courseTeacherId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Likes)) {
+        if (!(object instanceof CourseTeachers)) {
             return false;
         }
-        Likes other = (Likes) object;
-        if ((this.likeId == null && other.likeId != null) || (this.likeId != null && !this.likeId.equals(other.likeId))) {
+        CourseTeachers other = (CourseTeachers) object;
+        if ((this.courseTeacherId == null && other.courseTeacherId != null) || (this.courseTeacherId != null && !this.courseTeacherId.equals(other.courseTeacherId))) {
             return false;
         }
         return true;
@@ -109,7 +107,7 @@ public class Likes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nth_ntq.pojo.Likes[ likeId=" + likeId + " ]";
+        return "com.nth_ntq.pojo.CourseTeachers[ courseTeacherId=" + courseTeacherId + " ]";
     }
     
 }

@@ -1,0 +1,51 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản lý khóa học</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container mt-3">
+        <h2>Danh sách khóa học</h2>
+
+        <form th:action="@{/admin/courses}" method="get">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <input type="text" class="form-control" name="kw" placeholder="Tìm theo tên..." />
+                </div>
+                <div class="col-md-6 mb-2">
+                    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                    <a th:href="@{/admin/courses/add}" class="btn btn-success">Thêm mới</a>
+                </div>
+            </div>
+        </form>
+
+        <hr />
+
+        <table class="table table-bordered table-striped mt-2">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tiêu đề</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${courses}">
+                    <td th:text="${c.courseId}"></td>
+                    <td th:text="${c.title}"></td>
+                    <td>
+                        <a th:href="@{/admin/courses/{id}(id=${c.courseId})}" class="btn btn-warning btn-sm">Sửa</a>
+                        <a th:href="@{/admin/courses/delete/{id}(id=${c.courseId})}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>

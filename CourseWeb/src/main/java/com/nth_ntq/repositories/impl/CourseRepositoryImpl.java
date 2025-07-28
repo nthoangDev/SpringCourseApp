@@ -82,13 +82,13 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public void addOrUpdateCourse(Courses c) {
-        Session s = factory.getObject().getCurrentSession();
-        if (c.getCourseId() == null) {
+    public Courses addOrUpdateCourse(Courses c) {
+        Session s = this.factory.getObject().getCurrentSession();
+        if (c.getCourseId() == null)
             s.persist(c);
-        } else {
+        else
             s.merge(c);
-        }
+        return c;
     }
 
     @Override

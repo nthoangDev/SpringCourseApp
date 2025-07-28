@@ -4,18 +4,13 @@
  */
 package com.nth_ntq.services;
 
-import com.nth_ntq.pojo.Courses;
+import com.nth_ntq.pojo.Tags;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author pc
  */
-public interface CourseService {
-    List<Courses> getCourses(Map<String, String> params);
-    Courses getCourseById(Long id);
-    Courses addOrUpdateCourse(Courses c);
-    void deleteCourse(Long id);
-    long countCourse();
+public interface TagService {
+    List<Tags> getTags();
 }

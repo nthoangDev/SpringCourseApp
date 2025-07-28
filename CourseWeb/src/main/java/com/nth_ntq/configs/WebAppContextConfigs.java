@@ -6,6 +6,8 @@ package com.nth_ntq.configs;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.nth_ntq.formatters.TagFormatter;
+import org.springframework.beans.factory.annotation.Autowired;
 //import com.nth_ntq.formatters.CategoryFormatter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,6 +36,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 })
 public class WebAppContextConfigs implements WebMvcConfigurer {
 
+
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
@@ -41,14 +44,13 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-//        registry.addFormatter(new CategoryFormatter());
+        registry.addFormatter(new TagFormatter());
     }
-    
-    
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
-                
+
     }
+
 }

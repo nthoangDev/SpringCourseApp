@@ -6,6 +6,7 @@ package com.nth_ntq.controllers;
 
 import com.nth_ntq.pojo.Courses;
 import com.nth_ntq.services.CourseService;
+import com.nth_ntq.services.TagService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,22 +28,26 @@ public class CourseController {
 
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private TagService tagService;
 
     @GetMapping
     public String list(Model model, @RequestParam Map<String, String> params) {
         model.addAttribute("courses", courseService.getCourses(params));
-        return "courses"; 
+        return "courses";
     }
 
     @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("course", new Courses());
+        model.addAttribute("allTags", tagService.getTags());
         return "course-form";
     }
 
     @GetMapping("/{id}")
     public String editForm(Model model, @PathVariable Long id) {
         model.addAttribute("course", courseService.getCourseById(id));
+        model.addAttribute("allTags", tagService.getTags());
         return "course-form";
     }
 

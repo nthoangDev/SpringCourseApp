@@ -21,12 +21,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -111,6 +113,8 @@ public class Courses implements Serializable {
     private Set<Lessons> lessonsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
     private Set<Likes> likesSet;
+    @Transient
+    private MultipartFile file;
 
     public Courses() {
     }
@@ -324,5 +328,19 @@ public class Courses implements Serializable {
     public String toString() {
         return "com.nth_ntq.pojo.Courses[ courseId=" + courseId + " ]";
     }
-    
+
+    /**
+     * @return the file
+     */
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
 }

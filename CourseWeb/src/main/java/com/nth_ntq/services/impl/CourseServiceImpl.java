@@ -4,11 +4,16 @@
  */
 package com.nth_ntq.services.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.nth_ntq.pojo.Courses;
 import com.nth_ntq.repositories.CourseRepository;
 import com.nth_ntq.services.CourseService;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +26,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private CourseRepository courseRepo;
+    @Autowired
+    private Cloudinary cloudinary;
 
     @Override
     public List<Courses> getCourses(Map<String, String> params) {
@@ -33,8 +40,18 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void addOrUpdateCourse(Courses c) {
-        this.courseRepo.addOrUpdateCourse(c);
+    public Courses addOrUpdateCourse(Courses c) {
+        if (c.getFile() != null && !c.getFile().isEmpty()) {
+            try {
+                Map res = cloudinary.uploader().upload(c.getFile().getBytes(),
+                        ObjectUtils.asMap("resource_type", "auto"));
+                c.setImageUrl(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(CourseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return this.courseRepo.addOrUpdateCourse(c);
     }
 
     @Override

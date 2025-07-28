@@ -291,5 +291,13 @@ public class Users implements Serializable {
     public String toString() {
         return "com.nth_ntq.pojo.Users[ userId=" + userId + " ]";
     }
+
+    public Object getId() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setUserRole(String role_teacher) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

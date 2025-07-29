@@ -18,9 +18,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -64,7 +66,7 @@ public class Lessons implements Serializable {
         @JoinColumn(name = "lesson_id", referencedColumnName = "lesson_id")}, inverseJoinColumns = {
         @JoinColumn(name = "assessment_id", referencedColumnName = "assessment_id")})
     @ManyToMany
-    private Set<Assessments> assessmentsSet;
+    private Set<Assessments> assessmentsSet = new HashSet<>();
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @ManyToOne(optional = false)
     private Courses courseId;
@@ -169,5 +171,5 @@ public class Lessons implements Serializable {
     public String toString() {
         return "com.nth_ntq.pojo.Lessons[ lessonId=" + lessonId + " ]";
     }
-    
+
 }

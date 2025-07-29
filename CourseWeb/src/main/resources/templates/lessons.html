@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Danh sách bài giảng</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container mt-4">
+        <h3>Danh sách bài giảng</h3>
+
+        <a class="btn btn-info mb-3" th:href="@{|/admin/courses/${courseId}/lessons/add|}">Thêm bài giảng</a>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tiêu đề</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="l : ${lessons}">
+                    <td th:text="${l.lessonId}"></td>
+                    <td th:text="${l.title}"></td>
+                    <td>
+                        <a class="btn btn-success btn-sm" 
+                           th:href="@{'/admin/courses/' + ${courseId} + '/lessons/edit/' + ${l.lessonId}}">Sửa️</a>
+
+                        <a class="btn btn-danger btn-sm" 
+                           th:href="@{'/admin/courses/' + ${courseId} + '/lessons/delete/' + ${l.lessonId}}">Xóa️</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a class="btn btn-secondary" th:href="@{/admin/courses}">Quay lại danh sách khóa học</a>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>
+

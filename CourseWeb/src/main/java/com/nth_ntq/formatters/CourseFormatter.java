@@ -4,8 +4,8 @@
  */
 package com.nth_ntq.formatters;
 
-import com.nth_ntq.pojo.Tags;
-import com.nth_ntq.services.TagService;
+import com.nth_ntq.pojo.Courses;
+import com.nth_ntq.services.CourseService;
 import java.text.ParseException;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +17,20 @@ import org.springframework.stereotype.Component;
  * @author pc
  */
 @Component
-public class TagFormatter implements Formatter<Tags> {
+public class CourseFormatter implements Formatter<Courses> {
 
     @Autowired
-    private TagService tagService;
+    private CourseService courseService;
 
     @Override
-    public Tags parse(String tagId, Locale locale) throws ParseException {
-        Tags tag = new Tags();
-        tag.setTagId(Long.valueOf(tagId)); 
-        return tag;
+    public Courses parse(String text, Locale locale) throws ParseException {
+        Courses c = new Courses();
+        c.setCourseId(Long.valueOf(text));
+        return c;
     }
 
     @Override
-    public String print(Tags tag, Locale locale) {
-        return tag.getTagId().toString();
+    public String print(Courses object, Locale locale) {
+        return object.getCourseId().toString();
     }
 }

@@ -6,6 +6,8 @@ package com.nth_ntq.configs;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.nth_ntq.formatters.AssessmentFormatter;
+import com.nth_ntq.formatters.CourseFormatter;
 import com.nth_ntq.formatters.TagFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 //import com.nth_ntq.formatters.CategoryFormatter;
@@ -36,7 +38,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 })
 public class WebAppContextConfigs implements WebMvcConfigurer {
 
-
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
@@ -45,6 +46,8 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new TagFormatter());
+        registry.addFormatter(new AssessmentFormatter());
+        registry.addFormatter(new CourseFormatter());
     }
 
     @Override

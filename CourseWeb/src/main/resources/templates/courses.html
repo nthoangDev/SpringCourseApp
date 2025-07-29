@@ -1,55 +1,59 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Quản lý khóa học</title>
+    <head>
+        <title>Quản lý khóa học</title>
     <th:block th:replace="base :: bootstrap"></th:block>
 </head>
 <body>
-<div th:replace="base :: header"></div>
+    <div th:replace="base :: header"></div>
 
-<main class="container mt-3">
-    <h2>Danh sách khóa học</h2>
+    <main class="container mt-3">
+        <h2>Danh sách khóa học</h2>
 
-    <form th:action="@{/admin/courses}" method="get">
-        <div class="row">
-            <div class="col-md-6 mb-2">
-                <input type="text" class="form-control" name="kw" placeholder="Tìm theo tên khóa học..." />
+        <form th:action="@{/admin/courses}" method="get">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <input type="text" class="form-control" name="kw" placeholder="Tìm theo tên khóa học..." />
+                </div>
+                <div class="col-md-6 mb-2">
+                    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                    <a th:href="@{/admin/courses/add}" class="btn btn-success">Thêm mới</a>
+                </div>
             </div>
-            <div class="col-md-6 mb-2">
-                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
-                <a th:href="@{/admin/courses/add}" class="btn btn-success">Thêm mới</a>
-            </div>
-        </div>
-    </form>
+        </form>
 
-    <hr />
+        <hr />
 
-    <table class="table table-bordered table-striped mt-2">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Ảnh</th>
-                <th>Tiêu đề</th>
-                <th>Mô tả</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="c : ${courses}">
-                <td th:text="${c.courseId}"></td>
-                <td><img th:src="${c.imageUrl}" width="150" /></td>
-                <td th:text="${c.title}"></td>
-                <td th:text="${c.description}" width="500"></td>
-                <td>
-                    <a th:href="@{'/admin/courses/' + ${c.courseId}}" class="btn btn-warning btn-sm">Sửa</a>
-                    <a th:href="@{'/admin/courses/delete/' + ${c.courseId}}" class="btn btn-danger btn-sm"
-                       onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</main>
+        <table class="table table-bordered table-striped mt-2">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ảnh</th>
+                    <th>Tiêu đề</th>
+                    <th>Mô tả</th>
+                    <th>Bài giảng</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${courses}">
+                    <td th:text="${c.courseId}"></td>
+                    <td><img th:src="${c.imageUrl}" width="150" /></td>
+                    <td th:text="${c.title}"></td>
+                    <td th:text="${c.description}" width="500"></td>
+                    <td>
+                        <a th:href="@{'/admin/courses/' + ${c.courseId} + '/lessons'}" class="btn btn-info">Bài giảng</a>
+                    </td>
+                    <td>
+                        <a th:href="@{'/admin/courses/' + ${c.courseId}}" class="btn btn-warning btn-sm">Sửa</a>
+                        <a th:href="@{'/admin/courses/delete/' + ${c.courseId}}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
 
-<div th:replace="base :: footer"></div>
+    <div th:replace="base :: footer"></div>
 </body>
 </html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="${lesson.lessonId == null} ? 'Thêm bài giảng' : 'Cập nhật bài giảng'"></title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container mt-4" style="max-width: 800px;">
+        <h4 th:text="${lesson.lessonId == null} ? 'Thêm mới bài giảng' : 'Chỉnh sửa bài giảng'"></h4>
+
+        <form th:object="${lesson}" th:action="@{'/admin/courses/' + ${courseId} + '/lessons/save'}" method="post">
+            <input type="hidden" th:field="*{lessonId}" />
+            <input type="hidden" th:field="*{courseId}" />
+
+
+            <!-- Tiêu đề -->
+            <div class="mb-3">
+                <label class="form-label">Tiêu đề bài giảng</label>
+                <input type="text" class="form-control" th:field="*{title}" required placeholder="VD: Giới thiệu khóa học..." />
+            </div>
+
+            <!-- Nội dung -->
+            <div class="mb-3">
+                <label class="form-label">Nội dung bài giảng</label>
+                <textarea class="form-control" th:field="*{content}" rows="6" placeholder="Nội dung chi tiết..."></textarea>
+            </div>
+
+            <!-- Video URL -->
+            <div class="mb-3">
+                <label class="form-label">Link video (YouTube, Vimeo...)</label>
+                <input type="text" class="form-control" th:field="*{videoUrl}" placeholder="https://..." />
+            </div>
+
+            <!-- Thứ tự hiển thị -->
+            <div class="mb-3">
+                <label class="form-label">Thứ tự trong khóa học</label>
+                <input type="number" class="form-control" th:field="*{orderIndex}" placeholder="VD: 1, 2, 3..." />
+            </div>
+
+            <!-- Cho phép xem trước -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" th:field="*{isPreview}" id="previewCheck" />
+                <label class="form-check-label" for="previewCheck">Cho phép học thử (preview)</label>
+            </div>
+
+            <!-- Danh sách bài đánh giá liên kết -->
+            <div class="mb-3">
+                <label class="form-label">Gắn bài tập / bài kiểm tra</label>
+                <div class="form-check" th:each="a : ${allAssessments}">
+                    <input class="form-check-input" type="checkbox" th:value="${a.assessmentId}" th:field="*{assessmentsSet}" />
+                    <label class="form-check-label" th:text="${a.title}"></label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Lưu</button>
+                <a th:href="@{'/admin/courses/' + ${courseId} + '/lessons'}" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </form>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>

@@ -1,54 +1,39 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Chọn User lên Giảng viên</title>
-  <th:block th:replace="base :: bootstrap"></th:block>
+  <title>Phân quyền Giảng viên</title>
+  <th:block th:replace="base :: bootstrap" />
 </head>
 <body>
-  <div th:replace="base :: header"></div>
+  <div th:replace="base :: header" />
 
   <main class="container mt-4" style="max-width:600px">
     <h3>Chọn User lên Giảng viên</h3>
 
-    <!-- Search form -->
+    <!-- tìm kiếm User chưa phải teacher -->
     <form th:action="@{/admin/teachers/assign}" method="get" class="row g-2 mb-3">
       <div class="col">
-        <input type="text"
-               name="kw"
+        <input name="kw" type="text"
                th:value="${kw}"
                class="form-control"
                placeholder="Tìm theo username hoặc tên..." />
       </div>
-      <div class="col-auto">
-        <button class="btn btn-primary">Tìm</button>
-      </div>
-      <div class="col-auto">
-        <!-- Reset quay lại trang /assign không có kw -->
-        <a th:href="@{/admin/teachers/assign}" class="btn btn-secondary">Reset</a>
-      </div>
+      <div class="col-auto"><button class="btn btn-primary">Tìm</button></div>
+      <div class="col-auto"><a th:href="@{/admin/teachers/assign}" class="btn btn-secondary">Reset</a></div>
     </form>
 
-    <!-- Dropdown chọn user -->
-    <div class="mb-3">
-      <label class="form-label">User</label>
-      <select th:field="*{selectedUserId}"
-              th:object="${formData}"
-              class="form-select">
+    <!-- dropdown assign -->
+    <form th:action="@{/admin/teachers/assign}" method="post" class="d-flex gap-2">
+      <select name="userId" class="form-select">
         <option th:each="u : ${users}"
                 th:value="${u.userId}"
-                th:text="${u.username + ' — ' + u.fullName}">
-        </option>
+                th:text="${u.username + ' — ' + u.fullName}" />
       </select>
-    </div>
-
-    <div>
-      <button th:formaction="@{/admin/teachers/assign/save}"
-              formmethod="post"
-              class="btn btn-success">Thăng chức</button>
+      <button type="submit" class="btn btn-success">Thăng chức</button>
       <a th:href="@{/admin/teachers}" class="btn btn-light">Hủy</a>
-    </div>
+    </form>
   </main>
 
-  <div th:replace="base :: footer"></div>
+  <div th:replace="base :: footer" />
 </body>
 </html>

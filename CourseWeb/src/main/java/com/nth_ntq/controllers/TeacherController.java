@@ -27,8 +27,12 @@ public class TeacherController {
 
     // Hiển thị form phân quyền: list các User chưa là teacher
     @GetMapping("/assign")
-    public String assignForm(Model model) {
+    public String assignForm(
+            @RequestParam(name = "kw", required = false) String kw,
+            Model model) {
         model.addAttribute("users", teacherService.getUsersByRole("USER"));
+
+        model.addAttribute("kw", kw);
         return "admin/teacher-assign";
     }
 
@@ -44,7 +48,7 @@ public class TeacherController {
 
     // Xử lý thăng chức
     @PostMapping("/assign")
-    public String promote(@RequestParam Long userId) {
+    public String promote(@RequestParam("userId") Long userId) {
         teacherService.promoteToTeacher(userId);
         return "redirect:/admin/teachers";
     }
@@ -79,4 +83,5 @@ public class TeacherController {
         teacherService.deleteTeacher(id);
         return "redirect:/admin/teachers";
     }
+
 }

@@ -1,57 +1,55 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Quản lý Giảng viên</title>
-    <th:block th:replace="base :: bootstrap"></th:block>
+<head>
+  <title>Quản lý Giảng viên</title>
+  <th:block th:replace="base :: bootstrap" />
 </head>
 <body>
-    <div th:replace="base :: header"></div>
+  <div th:replace="base :: header" />
 
-    <main class="container mt-3">
-        <h2>Danh sách Giảng viên</h2>
-        <!-- ► SEARCH FORM -->
-        <form th:action="@{/admin/teachers}" method="get" class="row g-3 mb-3">
-            <div class="col-md-6">
-                <input type="text" name="kw" class="form-control"
-                       placeholder="Tìm theo username hoặc họ & tên..."
-                       th:value="${kw}"/>
-            </div>
-            <div class="col-md-auto">
-                <button class="btn btn-primary">Tìm kiếm</button>
-                <a th:href="@{/admin/teachers/assign}" class="btn btn-success">Phân quyền</a>
-                <a th:href="@{/admin/teachers}" class="btn btn-secondary">Reset</a>
-            </div>
-        </form>
-        <!-- ◀ END SEARCH FORM -->
-        <table class="table table-bordered table-striped mt-2">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Họ & Tên</th>
-                    <th>Email</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="t : ${teachers}">
-                    <!-- Đổi từ t.id thành t.userId -->
-                    <td th:text="${t.userId}">1</td>
-                    <td th:text="${t.username}">alice</td>
-                    <!-- Đổi từ t.firstName + t.lastName thành t.fullName -->
-                    <td th:text="${t.fullName}">Alice Nguyen</td>
-                    <td th:text="${t.email}">alice@mail.com</td>
-                    <td>
-                        
-                        <a th:href="@{/admin/teachers/delete/{id}(id=${t.userId})}"
-                           class="btn btn-danger btn-sm"
-                           onclick="return confirm('Bạn chắc chắn xóa giảng viên này?')">Xóa</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </main>
+  <main class="container mt-3">
+    <h2>Danh sách Giảng viên</h2>
 
-    <div th:replace="base :: footer"></div>
+    <!-- SEARCH -->
+    <form th:action="@{/admin/teachers}" method="get" class="row g-3 mb-3">
+      <div class="col-md-6">
+        <input name="kw" type="text"
+               th:value="${kw}"
+               class="form-control"
+               placeholder="Tìm theo username hoặc họ & tên..." />
+      </div>
+      <div class="col-md-auto">
+        <button class="btn btn-primary">Tìm kiếm</button>
+        <a th:href="@{/admin/teachers/assign}" class="btn btn-success">Phân quyền</a>
+        <a th:href="@{/admin/teachers}" class="btn btn-secondary">Reset</a>
+      </div>
+    </form>
+
+    <!-- TABLE -->
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th><th>Username</th><th>Họ & Tên</th><th>Email</th><th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="t : ${teachers}">
+          <td th:text="${t.userId}">1</td>
+          <td th:text="${t.username}">alice</td>
+          <td th:text="${t.fullName}">Alice Nguyen</td>
+          <td th:text="${t.email}">alice@mail.com</td>
+          <td>
+            <a th:href="@{/admin/teachers/demote/{id}(id=${t.userId})}"
+               class="btn btn-warning btn-sm"
+               onclick="return confirm('Bạn có chắc chắn giáng chức?')">
+              Giáng chức
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <div th:replace="base :: footer" />
 </body>
 </html>

@@ -17,11 +17,17 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TagServiceImpl implements TagService {
+
     @Autowired
     private TagRepository tagRepo;
 
     @Override
     public List<Tags> getTags() {
         return this.tagRepo.getTags();
+    }
+
+    @Override
+    public Tags getTagById(Long id) {
+        return tagRepo.findById(id);
     }
 }

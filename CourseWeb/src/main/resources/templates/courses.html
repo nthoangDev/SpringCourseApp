@@ -27,6 +27,7 @@
     <table class="table table-bordered table-striped mt-2">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Ảnh</th>
                 <th>Tiêu đề</th>
                 <th>Mô tả</th>
@@ -35,12 +36,13 @@
         </thead>
         <tbody>
             <tr th:each="c : ${courses}">
+                <td th:text="${c.courseId}"></td>
                 <td><img th:src="${c.imageUrl}" width="150" /></td>
                 <td th:text="${c.title}"></td>
-                <td th:text="${c.description}"></td>
+                <td th:text="${c.description}" width="500"></td>
                 <td>
-                    <a th:href="@{/admin/courses/{id}(id=${c.courseId})}" class="btn btn-warning btn-sm">Sửa</a>
-                    <a th:href="@{/admin/courses/delete/{id}(id=${c.courseId})}" class="btn btn-danger btn-sm"
+                    <a th:href="@{'/admin/courses/' + ${c.courseId}}" class="btn btn-warning btn-sm">Sửa</a>
+                    <a th:href="@{'/admin/courses/delete/' + ${c.courseId}}" class="btn btn-danger btn-sm"
                        onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
                 </td>
             </tr>

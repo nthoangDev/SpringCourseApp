@@ -41,6 +41,11 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Courses addOrUpdateCourse(Courses c) {
+        if (c.getCourseId() != null && (c.getFile() == null || c.getFile().isEmpty())) {
+            Courses old = this.courseRepo.getCourseById(c.getCourseId());
+            c.setImageUrl(old.getImageUrl());
+        }
+        
         if (c.getFile() != null && !c.getFile().isEmpty()) {
             try {
                 Map res = cloudinary.uploader().upload(c.getFile().getBytes(),

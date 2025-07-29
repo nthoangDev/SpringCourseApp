@@ -44,8 +44,8 @@ public class CourseController {
         return "course-form";
     }
 
-    @GetMapping("/{id}")
-    public String editForm(Model model, @PathVariable Long id) {
+    @GetMapping("/{courseId}")
+    public String editForm(Model model,  @PathVariable(value = "courseId") Long id) {
         model.addAttribute("course", courseService.getCourseById(id));
         model.addAttribute("allTags", tagService.getTags());
         return "course-form";
@@ -54,12 +54,12 @@ public class CourseController {
     @PostMapping("/save")
     public String save(@ModelAttribute Courses course) {
         courseService.addOrUpdateCourse(course);
-        return "redirect:/courses";
+        return "redirect:/admin/courses";
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
+    @GetMapping("/delete/{courseId}")
+    public String delete(@PathVariable(value = "courseId") Long id) {
         courseService.deleteCourse(id);
-        return "redirect:/courses";
+        return "redirect:/admin/courses";
     }
 }

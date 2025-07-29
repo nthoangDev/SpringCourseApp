@@ -18,14 +18,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TagFormatter implements Formatter<Tags> {
+
     @Autowired
     private TagService tagService;
 
     @Override
-    public Tags parse(String id, Locale locale) throws ParseException {
-        Long tagId = Long.valueOf(id);
-        return this.tagService.getTags()
-                .stream().filter(t -> t.getTagId().equals(tagId)).findFirst().orElse(null);
+    public Tags parse(String tagId, Locale locale) throws ParseException {
+        Tags tag = new Tags();
+        tag.setTagId(Long.valueOf(tagId)); // Gán ID trực tiếp
+        return tag;
     }
 
     @Override

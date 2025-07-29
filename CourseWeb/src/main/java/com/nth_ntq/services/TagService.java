@@ -13,4 +13,5 @@ import java.util.List;
  */
 public interface TagService {
     List<Tags> getTags();
+    Tags getTagById(Long id);
 }

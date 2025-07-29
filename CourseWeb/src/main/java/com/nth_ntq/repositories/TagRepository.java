@@ -12,5 +12,7 @@ import java.util.List;
  * @author pc
  */
 public interface TagRepository {
+
     List<Tags> getTags();
+    Tags findById(Long id);
 }

@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import org.hibernate.Hibernate;
 
 /**
  *
@@ -78,7 +79,9 @@ public class CourseRepositoryImpl implements CourseRepository {
     @Override
     public Courses getCourseById(Long id) {
         Session s = factory.getObject().getCurrentSession();
-        return s.get(Courses.class, id);
+        Courses c =  s.get(Courses.class, id);
+        Hibernate.initialize(c.getTagsSet()); 
+        return c;
     }
 
     @Override

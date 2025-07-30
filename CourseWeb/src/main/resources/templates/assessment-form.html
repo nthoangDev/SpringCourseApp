@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Thêm đánh giá</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <div class="container mt-4">
+        <h2>Thêm đánh giá mới</h2>
+
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form th:action="@{'/admin/courses/' + ${assessmentDTO.courseId} + '/assessments/save'}"
+                      method="post" th:object="${assessmentDTO}">
+                    <input type="hidden" th:field="*{assessmentId}"/>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Tiêu đề</label>
+                        <input type="text" th:field="*{title}" class="form-control" required/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Mô tả</label>
+                        <textarea th:field="*{description}" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Điểm tối đa</label>
+                            <input type="number" th:field="*{points}" class="form-control" min="0" required/>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Loại đánh giá</label>
+                            <select th:field="*{assessmentType}" class="form-select" id="typeSelect">
+                                <option value="ASSIGNMENT">Bài tập</option>
+                                <option value="TEST">Bài kiểm tra</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Ngày bắt đầu</label>
+                            <input type="datetime-local" th:field="*{availableAt}" class="form-control" required/>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Ngày hết hạn</label>
+                            <input type="datetime-local" th:field="*{dueAt}" class="form-control" required/>
+                        </div>
+                    </div>
+
+                    <!-- Trường riêng của Assignment -->
+                    <div class="mb-3" id="assignmentFields">
+                        <label class="form-label fw-semibold">Gia hạn nộp bài (nếu có)</label>
+                        <input type="datetime-local" th:field="*{dueDate}" class="form-control"/>
+                    </div>
+
+                    <!-- Trường riêng của Test -->
+                    <div class="mb-3" id="testFields" style="display:none">
+                        <label class="form-label fw-semibold">Thời gian làm bài (phút)</label>
+                        <input type="number" th:field="*{durationMinutes}" class="form-control"/>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-save me-1"></i> Lưu
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        <div th:replace="base :: footer"></div>
+
+        <script>
+            const typeSelect = document.getElementById('typeSelect');
+            const assignmentFields = document.getElementById('assignmentFields');
+            const testFields = document.getElementById('testFields');
+
+            function toggleFields() {
+                const selected = typeSelect.value;
+                assignmentFields.style.display = selected === 'ASSIGNMENT' ? 'block' : 'none';
+                testFields.style.display = selected === 'TEST' ? 'block' : 'none';
+            }
+
+            typeSelect.addEventListener('change', toggleFields);
+            toggleFields(); // Gọi lúc đầu để xử lý nếu có giá trị sẵn
+        </script>
+</body>
+</html>
+

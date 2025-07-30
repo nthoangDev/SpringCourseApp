@@ -95,5 +95,5 @@ public class Tests implements Serializable {
     public String toString() {
         return "com.nth_ntq.pojo.Tests[ testId=" + testId + " ]";
     }
-    
+
 }

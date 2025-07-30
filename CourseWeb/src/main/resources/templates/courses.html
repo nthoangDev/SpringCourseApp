@@ -22,16 +22,15 @@
             </div>
         </form>
 
-        <hr />
 
-        <table class="table table-bordered table-striped mt-2">
+        <table class="table table-hover table-striped">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Ảnh</th>
                     <th>Tiêu đề</th>
                     <th>Mô tả</th>
-                    <th>Bài giảng</th>
+                    <th>Bài giảng, bài tập</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -43,6 +42,10 @@
                     <td th:text="${c.description}" width="500"></td>
                     <td>
                         <a th:href="@{'/admin/courses/' + ${c.courseId} + '/lessons'}" class="btn btn-info">Bài giảng</a>
+                        <a class="btn btn-sm btn-outline-primary"
+                           th:href="@{'/admin/courses/' + ${c.courseId} + '/assessments'}">
+                            Xem bài tập
+                        </a>
                     </td>
                     <td>
                         <a th:href="@{'/admin/courses/' + ${c.courseId}}" class="btn btn-warning btn-sm">Sửa</a>

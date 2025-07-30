@@ -5,6 +5,8 @@
 package com.nth_ntq.repositories.impl;
 
 import com.nth_ntq.pojo.Assessments;
+import com.nth_ntq.pojo.Assignments;
+import com.nth_ntq.pojo.Tests;
 import com.nth_ntq.repositories.AssessmentRepository;
 import java.util.List;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -29,6 +31,17 @@ public class AssessmentRepositoryImpl implements AssessmentRepository {
     private LocalSessionFactoryBean factory;
 
     @Override
+    public Assessments addOrUpdateAssessment(Assessments a) {
+        Session s = factory.getObject().getCurrentSession();
+        if (a.getAssessmentId() == null) {
+            s.persist(a);
+        } else {
+            s.merge(a);
+        }
+        return a;
+    }
+
+    @Override
     public List<Assessments> getAssessmentsByCourseId(Long courseId) {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
@@ -45,5 +58,37 @@ public class AssessmentRepositoryImpl implements AssessmentRepository {
     public Assessments getById(Long id) {
         Session s = this.factory.getObject().getCurrentSession();
         return s.get(Assessments.class, id);
+    }
+
+    @Override
+    public void deleteAssessment(Long id) {
+        Session s = factory.getObject().getCurrentSession();
+        Assessments a = s.get(Assessments.class, id);
+        if (a != null) {
+            s.remove(a);
+        }
+    }
+
+    
+    @Override
+    public void addAssignment(Assignments a) {
+        Session session = this.factory.getObject().getCurrentSession();
+
+        if (a.getAssignmentId()!= null) {
+            session.merge(a);  
+        } else {
+            session.persist(a); 
+        }
+    }
+
+    @Override
+    public void addTest(Tests t) {
+        Session session = this.factory.getObject().getCurrentSession();
+
+        if (t.getTestId() != null) {
+            session.merge(t);  
+        } else {
+            session.persist(t); 
+        }
     }
 }

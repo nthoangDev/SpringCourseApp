@@ -4,6 +4,7 @@
  */
 package com.nth_ntq.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +43,7 @@ public class Tags implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "name")
     private String name;
+    @JsonIgnore
     @ManyToMany(mappedBy = "tagsSet")
     private Set<Courses> coursesSet;
 

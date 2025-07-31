@@ -4,6 +4,7 @@
  */
 package com.nth_ntq.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -91,29 +92,41 @@ public class Courses implements Serializable {
     @JoinTable(name = "course_tags", joinColumns = {
         @JoinColumn(name = "course_id", referencedColumnName = "course_id")}, inverseJoinColumns = {
         @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")})
+    @JsonIgnore
     @ManyToMany
     private Set<Tags> tagsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    @JsonIgnore
     private Set<Assessments> assessmentsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    @JsonIgnore
     private Set<Comments> commentsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    @JsonIgnore
     private Set<CartItems> cartItemsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    @JsonIgnore
     private Set<Enrollments> enrollmentsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    @JsonIgnore
     private Set<CourseTeachers> courseTeachersSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    @JsonIgnore
     private Set<Certificates> certificatesSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    @JsonIgnore
     private Set<Ratings> ratingsSet;
     @OneToMany(mappedBy = "courseId")
+    @JsonIgnore
     private Set<Notifications> notificationsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    @JsonIgnore
     private Set<Lessons> lessonsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    @JsonIgnore
     private Set<Likes> likesSet;
     @Transient
+    @JsonIgnore
     private MultipartFile file;
 
     public Courses() {

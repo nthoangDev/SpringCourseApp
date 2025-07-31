@@ -5,10 +5,12 @@
 package com.nth_ntq.repositories.impl;
 
 import com.nth_ntq.pojo.Courses;
+import com.nth_ntq.pojo.Tags;
 import com.nth_ntq.repositories.CourseRepository;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ import org.hibernate.Hibernate;
 @Repository
 @Transactional
 public class CourseRepositoryImpl implements CourseRepository {
+
     private static final int PAGE_SIZE = 6;
     @Autowired
     private LocalSessionFactoryBean factory;
@@ -48,19 +51,29 @@ public class CourseRepositoryImpl implements CourseRepository {
             if (kw != null && !kw.isEmpty()) {
                 predicates.add(b.like(root.get("title"), "%" + kw + "%"));
             }
-
-            String id = params.get("id");
-            if (id != null && !id.isEmpty()) {
-                predicates.add(b.equal(root.get("id").as(Long.class), Long.valueOf(id)));
+            // Lọc theo level
+            String level = params.get("level");
+            if (level != null && !level.isEmpty()) {
+                predicates.add(b.equal(root.get("level"), level));
             }
 
-            // Add more filters if needed: status, level, category...
-            q.where(predicates.toArray(Predicate[]::new));
-
+            // Sắp xếp (nếu có)
             String orderBy = params.get("orderBy");
-            if (orderBy != null && !orderBy.isEmpty()) {
-                q.orderBy(b.asc(root.get(orderBy)));
+            if ("price_desc".equals(orderBy)) {
+                q.orderBy(b.desc(root.get("price")));
+            } else if ("price_asc".equals(orderBy)) {
+                q.orderBy(b.asc(root.get("price")));
+            } else {
+                q.orderBy(b.desc(root.get("createdAt"))); // mặc định
             }
+
+            String tagId = params.get("tagId");
+            if (tagId != null && !tagId.isEmpty()) {
+                Join<Courses, Tags> tagJoin = root.join("tagsSet");
+                predicates.add(b.equal(tagJoin.get("tagId"), Long.parseLong(tagId)));
+            }
+
+            q.where(predicates.toArray(Predicate[]::new));
         }
 
         Query query = s.createQuery(q);
@@ -79,18 +92,19 @@ public class CourseRepositoryImpl implements CourseRepository {
     @Override
     public Courses getCourseById(Long id) {
         Session s = factory.getObject().getCurrentSession();
-        Courses c =  s.get(Courses.class, id);
-        Hibernate.initialize(c.getTagsSet()); 
+        Courses c = s.get(Courses.class, id);
+        Hibernate.initialize(c.getTagsSet());
         return c;
     }
 
     @Override
     public Courses addOrUpdateCourse(Courses c) {
         Session s = this.factory.getObject().getCurrentSession();
-        if (c.getCourseId() == null)
+        if (c.getCourseId() == null) {
             s.persist(c);
-        else
+        } else {
             s.merge(c);
+        }
         return c;
     }
 

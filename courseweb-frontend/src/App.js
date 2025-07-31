@@ -3,7 +3,8 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Home from "./components/Home";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import "./App.css";
 function App() {
   return (
     <>

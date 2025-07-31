@@ -1,6 +1,22 @@
+import { useEffect, useState } from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import Apis, { endpoint } from "../../configs/Apis";
 
 const Header = () => {
+    const [tags, setTags] = useState([]);
+
+    const loadTags = async () => {
+        let url = endpoint.tags;
+
+        let res = await Apis.get(url);
+
+        setTags(res.data);
+    }
+    useEffect(() => {
+        loadTags();
+    }, [])
+
     return (
         <>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top" className="shadow-sm">
@@ -11,13 +27,12 @@ const Header = () => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link href="/" className="px-3">Trang chủ</Nav.Link>
-                            <Nav.Link href="/courses" className="px-3">Khóa học</Nav.Link>
-                            <NavDropdown title="Tài khoản" id="collapsible-nav-dropdown">
-                                <NavDropdown.Item href="/profile">Hồ sơ</NavDropdown.Item>
-                                <NavDropdown.Item href="/settings">Cài đặt</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="/logout">Đăng xuất</NavDropdown.Item>
+                            <Link to="/" className="px-3 nav-link">Trang chủ</Link>
+                            <NavDropdown title="Chủ đề liên quan" id="collapsible-nav-dropdown" menuVariant="dark" >
+                                <Link  to={`/`} class="dropdown-item">Tất cả</Link>
+                                {tags.map(t => (
+                                    <Link key={t.tagId} to={`/?tagId=${t.tagId}`} class="dropdown-item">{t.name}</Link>
+                                ))}
                             </NavDropdown>
                         </Nav>
                         <Nav>

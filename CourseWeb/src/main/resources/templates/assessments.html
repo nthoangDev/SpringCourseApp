@@ -30,7 +30,7 @@
                     <td th:text="${a.assessmentType}"></td>
                     <td th:text="${#dates.format(a.availableAt, 'dd/MM/yyyy HH:mm')}"></td>
                     <td th:text="${#dates.format(a.dueAt, 'dd/MM/yyyy HH:mm')}"></td>
-                    <td th:text="0/${a.points}"></td>
+                    <td th:text="${0 + '/' + a.points}"></td>
                     <td>
                         <a class="btn btn-success btn-sm"
                            th:href="@{'/admin/courses/' + ${courseId} + '/assessments/edit/' + ${a.assessmentId}}">Sửa</a>

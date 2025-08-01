@@ -58,35 +58,38 @@ public class UserServiceImpl implements UserService {
         }
 
         Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(u.getUserRole()));
+        authorities.add(new SimpleGrantedAuthority(u.getRole()));
+        System.out.println("Tìm thấy user: " + u.getUsername());
+        System.out.println("Password (from DB): " + u.getPassword());
+        System.out.println(passwordEncoder.encode("123"));
+        System.out.println("Role: " + u.getRole());
+        System.out.println("Status: " + u.getStatus());
+        System.out.println("User authenticated: " + u.getUsername());
+        System.out.println("Matched password? " + passwordEncoder.matches("123", u.getPassword()));
 
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
     }
 
     @Override
-    public Users addUser(String username,
-            String email,
-            String rawPassword,
-            String fullName,
-            MultipartFile avatar) {
+    public Users addUser(Map<String, String> params, MultipartFile avatar) {
         Users u = new Users();
-        u.setUsername(username);
-        u.setEmail(email);
-        u.setPassword(passwordEncoder.encode(rawPassword));
-        u.setFullName(fullName != null ? fullName : "");
+        u.setUsername(params.get("username"));
+        u.setEmail(params.get("email"));
+        u.setPassword(this.passwordEncoder.encode(params.get("password")));
+        u.setFullName(params.get("fullname"));
         u.setRole("USER");
         u.setStatus("ACTIVE");
         u.setCreatedAt(new Date());
-        // Xử lý avatar nếu có
+
         if (avatar != null && !avatar.isEmpty()) {
             try {
                 Map<?, ?> res = cloudinary.uploader()
                         .upload(avatar.getBytes(),
                                 ObjectUtils.asMap("resource_type", "auto"));
-                u.setAvatarUrl((String) res.get("secure_url"));
+                u.setAvatarUrl(res.get("secure_url").toString());
             } catch (IOException ex) {
-                ex.printStackTrace();
+                System.out.println(ex.getMessage());
             }
         }
         return userRepo.addUser(u);

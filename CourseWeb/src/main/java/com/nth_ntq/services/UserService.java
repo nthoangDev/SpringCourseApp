@@ -19,12 +19,8 @@ public interface UserService extends UserDetailsService {
     List<Users> getUsersByKeyword(String kw);
 
     Users getUserByUsername(String username);
-
-    Users addUser(String username,
-            String email,
-            String rawPassword,
-            String fullName,
-            MultipartFile avatar);
+    
+    Users addUser(Map<String, String> params, MultipartFile avatar);
 
     boolean authenticate(String username, String password);
 }

@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Alert, Button, Card, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import Apis, { endpoint } from "../configs/Apis";
 import { Link, useSearchParams } from "react-router-dom";
+import cookie from 'react-cookies';
+import { MyCartContext } from "../configs/context";
+import MySpinner from "./layout/MySpinner";
+
 
 const Home = () => {
     const [courses, setCourses] = useState([]);
@@ -11,6 +15,7 @@ const Home = () => {
     const [level, setLevel] = useState('');
     const [sort, setSort] = useState('');
     const [params] = useSearchParams();
+    const [, cartDispatch] = useContext(MyCartContext);
 
     const loadCourses = async () => {
         let url = `${endpoint.courses}?page=${page}`;
@@ -72,12 +77,36 @@ const Home = () => {
         setPage(page + 1);
     }
 
+    const order = (course) =>{
+        let cart = cookie.load("cart") || null;
+        if (cart === null){
+            cart = {};
+        }
+
+        if (course.courseId in cart ){
+            cart[course.courseId].quantity ++;
+        }else{
+            cart[course.courseId] = {
+                "coureseId": course.coureseId,
+                "title": course.title,
+                "price": course.price,
+                "quantity": 1
+            }
+        }
+
+        cookie.save("cart", cart);
+        console.log(cart);
+
+        cartDispatch({
+            "type": "update"
+        })
+    }
 
     return (
         <>
 
             <Container>
-                {loading ? <Spinner animation="border" variant="info" /> :
+                {loading ? <MySpinner /> :
                     <>
                         <Form className="my-4">
                             <Row className="align-items-center g-2">
@@ -131,7 +160,7 @@ const Home = () => {
 
                                             <div className="card-buttons">
                                                 <Link to={`/courses/${c.courseId}`} className="btn btn-primary btn-sm" >Xem chi tiết</Link>
-                                                <Link className="btn btn-success btn-sm" >Đăng ký</Link>
+                                                <Link className="btn btn-success btn-sm"  onClick={()=>order(c)}>Đăng ký</Link>
                                             </div>
                                         </Card.Body>
                                     </Card>

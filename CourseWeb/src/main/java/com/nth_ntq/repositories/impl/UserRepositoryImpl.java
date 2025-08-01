@@ -18,6 +18,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  *
@@ -29,6 +30,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<Users> getUsersByKeyword(String kw) {
@@ -48,5 +51,30 @@ public class UserRepositoryImpl implements UserRepository {
         Query<Users> query = s.createQuery(q);
         return query.getResultList();
 
+    }
+    
+    @Override
+    public Users getUserByUsername(String username) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createNamedQuery("Users.findByUsername", Users.class);
+        q.setParameter("username", username);
+
+        return (Users) q.getSingleResult();
+
+    }
+    
+    @Override
+    public Users addUser(Users u) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.persist(u);
+        
+        return u;
+    }
+
+    @Override
+    public boolean authenticate(String username, String password) {
+        Users u = this.getUserByUsername(username);
+
+        return this.passwordEncoder.matches(password, u.getPassword());
     }
 }

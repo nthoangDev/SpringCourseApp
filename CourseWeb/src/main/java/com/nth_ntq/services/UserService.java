@@ -6,11 +6,25 @@ package com.nth_ntq.services;
 
 import com.nth_ntq.pojo.Users;
 import java.util.List;
+import java.util.Map;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
  * @author trung
  */
-public interface UserService {
+public interface UserService extends UserDetailsService {
+
     List<Users> getUsersByKeyword(String kw);
+
+    Users getUserByUsername(String username);
+
+    Users addUser(String username,
+            String email,
+            String rawPassword,
+            String fullName,
+            MultipartFile avatar);
+
+    boolean authenticate(String username, String password);
 }

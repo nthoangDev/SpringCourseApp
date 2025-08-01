@@ -59,29 +59,4 @@ public class TeacherController {
         teacherService.demoteToUser(userId);
         return "redirect:/admin/teachers";
     }
-
-    @GetMapping("/add")
-    public String addForm(Model model) {
-        model.addAttribute("teacher", new Users());
-        return "admin/teacher-form";
-    }
-
-    @GetMapping("/{id}")
-    public String editForm(Model model, @PathVariable Long id) {
-        model.addAttribute("teacher", teacherService.getTeacherById(id));
-        return "admin/teacher-form";
-    }
-
-    @PostMapping("/save")
-    public String save(@ModelAttribute("teacher") Users teacher) {
-        teacherService.addOrUpdateTeacher(teacher);
-        return "redirect:/admin/teachers";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
-        teacherService.deleteTeacher(id);
-        return "redirect:/admin/teachers";
-    }
-
 }

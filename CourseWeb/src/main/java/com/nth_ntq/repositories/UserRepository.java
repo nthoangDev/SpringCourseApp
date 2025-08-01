@@ -13,4 +13,7 @@ import java.util.List;
  */
 public interface UserRepository {
    List<Users> getUsersByKeyword(String kw);
+   Users getUserByUsername(String username);
+   Users addUser(Users u);
+   boolean authenticate(String username, String password);
 }

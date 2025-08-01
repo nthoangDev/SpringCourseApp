@@ -4,22 +4,11 @@
  */
 package com.nth_ntq.repositories;
 
-import com.nth_ntq.pojo.Lessons;
-import java.util.List;
-
 /**
  *
  * @author pc
  */
-public interface LessonRepository {
-
-    List<Lessons> getLessonsByCourseId(Long courseId);
-
-    Lessons getLessonById(Long id);
-
-    Lessons addOrUpdateLesson(Lessons l);
-
-    void deleteLesson(Long id);
-
+public interface EnrollmentRepository {
     long countByCourse(Long courseId);
+    boolean existsByUserAndCourse(Long userId, Long courseId);
 }

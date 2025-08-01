@@ -69,4 +69,12 @@ public class LessonRepositoryImpl implements LessonRepository {
             s.remove(l);
         }
     }
+
+    @Override
+    public long countByCourse(Long courseId) {
+        Session s = factory.getObject().getCurrentSession();
+        Query<Long> q = s.createQuery("SELECT COUNT(*) FROM Lessons l WHERE l.courseId.courseId = :cid", Long.class);
+        q.setParameter("cid", courseId);
+        return q.getSingleResult();
+    }
 }

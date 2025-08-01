@@ -123,5 +123,7 @@ public class CourseRepositoryImpl implements CourseRepository {
         Query q = s.createQuery("SELECT COUNT(*) FROM Courses", Courses.class);
         return (long) q.getSingleResult();
     }
+    
+   
 
 }

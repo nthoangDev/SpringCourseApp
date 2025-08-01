@@ -4,22 +4,13 @@
  */
 package com.nth_ntq.repositories;
 
-import com.nth_ntq.pojo.Lessons;
+import com.nth_ntq.pojo.Comments;
 import java.util.List;
 
 /**
  *
  * @author pc
  */
-public interface LessonRepository {
-
-    List<Lessons> getLessonsByCourseId(Long courseId);
-
-    Lessons getLessonById(Long id);
-
-    Lessons addOrUpdateLesson(Lessons l);
-
-    void deleteLesson(Long id);
-
-    long countByCourse(Long courseId);
+public interface CommentRepository {
+    List<Comments> getCommentsByCourse(Long courseId);
 }

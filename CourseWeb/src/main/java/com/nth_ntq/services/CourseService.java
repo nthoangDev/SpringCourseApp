@@ -18,4 +18,5 @@ public interface CourseService {
     Courses addOrUpdateCourse(Courses c);
     void deleteCourse(Long id);
     long countCourse();
+    Map<String, Object> getCourseDetail(Long courseId);
 }

@@ -31,4 +31,9 @@ public class ApiCourseController {
         List<Courses> courses = courseService.getCourses(params);
         return ResponseEntity.ok(courses);
     }
+
+    @GetMapping("/courses/{courseId}")
+    public ResponseEntity<?> getCourseDetail(@PathVariable(value = "courseId") Long courseId) {
+        return new ResponseEntity<>(this.courseService.getCourseDetail(courseId), HttpStatus.OK);
+    }
 }

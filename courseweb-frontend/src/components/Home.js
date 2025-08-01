@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Card, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import Apis, { endpoint } from "../configs/Apis";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const Home = () => {
     const [courses, setCourses] = useState([]);
@@ -86,7 +86,8 @@ const Home = () => {
                                 </Col>
                                 <Col xs={6} md={3}>
                                     <Form.Select value={level} onChange={(e) => setLevel(e.target.value)} >
-                                        <option value="">-- Chọn trình độ --</option> <option value="BEGINNER">Cơ bản</option>
+                                        <option value="">-- Chọn trình độ --</option> 
+                                        <option value="BEGINNER">Cơ bản</option>
                                         <option value="INTERMEDIATE">Trung cấp</option>
                                         <option value="ADVANCED">Nâng cao</option>
                                     </Form.Select>
@@ -116,7 +117,7 @@ const Home = () => {
                             {courses.map(c => (
                                 <Col key={c.courseId} md={3} xs={6} className="p-2">
                                     <Card>
-                                        <Card.Img variant="top" src={c.imageUrl} alt={c.title} className="card-img-top" />
+                                        <Card.Img variant="top" src={c.imageUrl} alt={c.title} className="card-img" />
                                         <Card.Body>
                                             <Card.Title className="card-title">{c.title}</Card.Title>
 
@@ -129,8 +130,8 @@ const Home = () => {
                                             </Card.Text>
 
                                             <div className="card-buttons">
-                                                <Button variant="primary" size="sm">Xem chi tiết</Button>
-                                                <Button variant="success" size="sm">Đăng ký</Button>
+                                                <Link to={`/courses/${c.courseId}`} className="btn btn-primary btn-sm" >Xem chi tiết</Link>
+                                                <Link className="btn btn-success btn-sm" >Đăng ký</Link>
                                             </div>
                                         </Card.Body>
                                     </Card>

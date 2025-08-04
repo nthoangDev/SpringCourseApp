@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Alert, Button, Card, Col, Container, Form, Row, Spinner } from "react-bootstrap";
-import Apis, { endpoint } from "../configs/Apis";
+import Apis, { authApis, endpoint } from "../configs/Apis";
 import { Link, useSearchParams } from "react-router-dom";
 import cookie from 'react-cookies';
 import { MyCartContext } from "../configs/context";
@@ -77,30 +77,24 @@ const Home = () => {
         setPage(page + 1);
     }
 
-    const order = (course) =>{
-        let cart = cookie.load("cart") || null;
-        if (cart === null){
-            cart = {};
+   const order = async (course) => {
+    try {
+        let res = await authApis().post(endpoint["cart-add"], {
+            courseId: course.courseId
+        });
+
+        if (res.status === 200 || res.status === 201) {
+            alert("Đã thêm vào giỏ hàng!");
+            cartDispatch({ type: "update" });
         }
-
-        if (course.courseId in cart ){
-            cart[course.courseId].quantity ++;
-        }else{
-            cart[course.courseId] = {
-                "coureseId": course.coureseId,
-                "title": course.title,
-                "price": course.price,
-                "quantity": 1
-            }
+    } catch (err) {
+        if (err.response && err.response.data && err.response.data.error) {
+            alert("Lỗi:  " + err.response.data.error);
+        } else {
+            alert("Lỗi: Lỗi khi thêm giỏ hàng");
         }
-
-        cookie.save("cart", cart);
-        console.log(cart);
-
-        cartDispatch({
-            "type": "update"
-        })
     }
+}
 
     return (
         <>

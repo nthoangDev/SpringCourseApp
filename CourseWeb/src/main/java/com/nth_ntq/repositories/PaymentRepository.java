@@ -4,17 +4,13 @@
  */
 package com.nth_ntq.repositories;
 
-import com.nth_ntq.pojo.Enrollments;
-
+import com.nth_ntq.pojo.Payments;
 /**
  *
  * @author pc
  */
-public interface EnrollmentRepository {
 
-    Enrollments save(Enrollments e);
 
-    long countByCourse(Long courseId);
-
-    boolean existsByUserAndCourse(Long userId, Long courseId);
+public interface PaymentRepository {
+    Payments save(Payments p);
 }

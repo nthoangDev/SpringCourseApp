@@ -5,22 +5,15 @@
 package com.nth_ntq.repositories;
 
 import com.nth_ntq.pojo.Carts;
-import com.nth_ntq.pojo.CartItems;
-import java.util.List;
 
 /**
  *
  * @author pc
  */
-public interface CartItemRepository {
+public interface CartRepository {
 
-    List<CartItems> findByCart(Carts cart);
+    Carts findByUserId(Long userId);
 
-    CartItems save(CartItems item);
+    void save(Carts cart);
 
-    void deleteByCartId(Long cartId);
-
-    CartItems findById(Long itemId);
-
-    void deleteById(Long itemId);
 }

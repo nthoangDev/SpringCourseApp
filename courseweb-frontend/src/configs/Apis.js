@@ -9,7 +9,16 @@ export const endpoint = {
     "tags": "/tags",
     'register': '/users',
     'login': '/login',
-    'profile': '/secure/profile'
+    'profile': '/secure/profile',
+    
+    "cart-items": "/secure/cart/unpaid",               
+    "cart-add": "/secure/cart/add",                    
+    cartDelete: (itemId) => `/secure/cart/items/${itemId}`, 
+    "cart-clear": "/secure/cart/clear",               
+    "cart-total": "/secure/cart/total",              
+
+    "checkout": "/secure/cart/checkout",               
+    "vnpayReturn": "/payment/vnpay_return"    
 
 }
 

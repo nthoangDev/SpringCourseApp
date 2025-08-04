@@ -32,7 +32,7 @@ const Header = () => {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
                             <Link to="/" className="px-3 nav-link">Trang chủ</Link>
-                            <NavDropdown title="Chủ đề liên quan" id="collapsible-nav-dropdown" menuVariant="dark" >
+                            <NavDropdown title="Chủ đề liên quan" id="collapsible-nav-dropdown" menuVariant="dark" className="px-3">
                                 <Link to={`/`} class="dropdown-item">Tất cả</Link>
                                 {tags.map(t => (
                                     <Link key={t.tagId} to={`/?tagId=${t.tagId}`} class="dropdown-item">{t.name}</Link>
@@ -40,7 +40,7 @@ const Header = () => {
                             </NavDropdown>
                         </Nav>
                         <Nav>
-                            <Nav.Link href="/cart" className="px-2 position-relative d-flex align-items-center gap-2">
+                            <Nav.Link href="/cart" className="px-3 position-relative d-flex align-items-center gap-2">
                                 <i className="bi bi-cart-fill fs-5"></i>
                                 <span>Giỏ hàng</span>
                                 <Badge bg="danger" pill className="position-absolute top-0 start-100 translate-middle">{cartCounter}</Badge>

@@ -52,7 +52,7 @@ public class UserRepositoryImpl implements UserRepository {
         return query.getResultList();
 
     }
-    
+
     @Override
     public Users getUserByUsername(String username) {
         Session s = this.factory.getObject().getCurrentSession();
@@ -62,12 +62,12 @@ public class UserRepositoryImpl implements UserRepository {
         return (Users) q.getSingleResult();
 
     }
-    
+
     @Override
     public Users addUser(Users u) {
         Session s = this.factory.getObject().getCurrentSession();
         s.persist(u);
-        
+
         return u;
     }
 
@@ -77,4 +77,13 @@ public class UserRepositoryImpl implements UserRepository {
 
         return this.passwordEncoder.matches(password, u.getPassword());
     }
+
+    @Override
+    public Users getUserById(Long userId) {
+        Session s = factory.getObject().getCurrentSession();
+        Users u = s.get(Users.class, userId);
+        return u;
+    }
+
+   
 }

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package com.nth_ntq.repositories;
+package com.nth_ntq.services;
 
 import com.nth_ntq.pojo.Enrollments;
 
@@ -10,11 +10,7 @@ import com.nth_ntq.pojo.Enrollments;
  *
  * @author pc
  */
-public interface EnrollmentRepository {
+public interface EnrollmentService {
 
-    Enrollments save(Enrollments e);
-
-    long countByCourse(Long courseId);
-
-    boolean existsByUserAndCourse(Long userId, Long courseId);
+    void save(Enrollments enrollment);
 }

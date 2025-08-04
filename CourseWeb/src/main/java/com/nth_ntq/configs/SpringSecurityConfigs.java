@@ -37,7 +37,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 @ComponentScan(basePackages = {
     "com.nth_ntq.controllers",
     "com.nth_ntq.repositories",
-    "com.nth_ntq.services"
+    "com.nth_ntq.services",
+    "com.nth_ntq.utils"
 })
 public class SpringSecurityConfigs {
 

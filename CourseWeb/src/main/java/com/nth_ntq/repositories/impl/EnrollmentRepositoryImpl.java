@@ -4,6 +4,7 @@
  */
 package com.nth_ntq.repositories.impl;
 
+import com.nth_ntq.pojo.Enrollments;
 import com.nth_ntq.repositories.EnrollmentRepository;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -18,10 +19,18 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class EnrollmentRepositoryImpl implements EnrollmentRepository{
+public class EnrollmentRepositoryImpl implements EnrollmentRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
-    
+
+    @Override
+    public Enrollments save(Enrollments e) {
+        Session s = factory.getObject().getCurrentSession();
+        s.persist(e);
+        return e;
+    }
+
     @Override
     public long countByCourse(Long courseId) {
         Session s = factory.getObject().getCurrentSession();

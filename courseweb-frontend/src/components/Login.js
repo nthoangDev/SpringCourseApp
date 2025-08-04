@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from "react";
 import { Button, Col, Container, Row, Form, Card } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Apis, { authApis, endpoint } from "../configs/Apis";
 import cookie from 'react-cookies';
 import MyCartReducer from "../reducers/MyCartReducer";
@@ -11,6 +11,8 @@ const Login = () => {
     const [, dispatch] = useContext(MyUserContext);
     const [loading, setLoading] = useState(false);
     const nav = useNavigate();
+    const [q] = useSearchParams();
+
     const info = [
         {
             title: "Tên đăng nhập",
@@ -44,8 +46,9 @@ const Login = () => {
             });
 
             cookie.save('user', JSON.stringify(u.data)); 
-
-            nav("/");
+            let next = q.get("next");
+            console.log(next)
+            nav(next?next:"/");
         } catch (e) {
             console.log(e.message);
         } finally {

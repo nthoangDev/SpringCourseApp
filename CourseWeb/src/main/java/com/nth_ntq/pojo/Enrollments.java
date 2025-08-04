@@ -146,5 +146,9 @@ public class Enrollments implements Serializable {
     public String toString() {
         return "com.nth_ntq.pojo.Enrollments[ enrollmentId=" + enrollmentId + " ]";
     }
+
+    public boolean isCompleted() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

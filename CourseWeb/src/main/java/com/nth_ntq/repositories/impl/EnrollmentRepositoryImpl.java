@@ -4,7 +4,9 @@
  */
 package com.nth_ntq.repositories.impl;
 
+import com.nth_ntq.pojo.Enrollments;
 import com.nth_ntq.repositories.EnrollmentRepository;
+import jakarta.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +14,25 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  *
  * @author pc
  */
 @Repository
 @Transactional
-public class EnrollmentRepositoryImpl implements EnrollmentRepository{
+public class EnrollmentRepositoryImpl implements EnrollmentRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
-    
+
+    @Autowired
+    public EnrollmentRepositoryImpl(LocalSessionFactoryBean factory) {
+        this.factory = factory;
+    }
+
     @Override
     public long countByCourse(Long courseId) {
         Session s = factory.getObject().getCurrentSession();
@@ -37,5 +48,34 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository{
         q.setParameter("uid", userId);
         q.setParameter("cid", courseId);
         return q.getSingleResult() > 0;
+    }
+
+    @Override
+    public List<Enrollments> findByUserId(Long userId) {
+        Session s = factory.getObject().getCurrentSession();
+        // Chú ý: property trong Enrollments là 'userId', không phải 'users'
+        TypedQuery<Enrollments> q = s.createQuery(
+                "SELECT e FROM Enrollments e WHERE e.userId.userId = :uid",
+                Enrollments.class
+        );
+        q.setParameter("uid", userId);
+        return q.getResultList();
+    }
+    
+     @Override
+    public Optional<Enrollments> findByUserIdAndCourseId(Long userId, Long courseId) {
+        Session session = factory.getObject().getCurrentSession();
+        Query q = session.createQuery(
+            "FROM Enrollments e " +
+            " WHERE e.userId.userId = :uid AND e.courseId.courseId = :cid",
+            Enrollments.class
+        );
+        q.setParameter("uid", userId);
+        q.setParameter("cid", courseId);
+        List<Enrollments> list = q.getResultList();
+        if (list.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(list.get(0));
     }
 }

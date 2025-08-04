@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import org.hibernate.Hibernate;
 
 /**
@@ -93,7 +94,12 @@ public class CourseRepositoryImpl implements CourseRepository {
     public Courses getCourseById(Long id) {
         Session s = factory.getObject().getCurrentSession();
         Courses c = s.get(Courses.class, id);
+        if (c == null) {
+            throw new NoSuchElementException("Khóa học không tồn tại: " + id);
+        }
+        // Force-load các relation cần dùng ở view/service
         Hibernate.initialize(c.getTagsSet());
+        Hibernate.initialize(c.getCourseTeachersSet());
         return c;
     }
 
@@ -123,7 +129,5 @@ public class CourseRepositoryImpl implements CourseRepository {
         Query q = s.createQuery("SELECT COUNT(*) FROM Courses", Courses.class);
         return (long) q.getSingleResult();
     }
-    
-   
 
 }

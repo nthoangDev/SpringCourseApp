@@ -24,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -39,7 +40,13 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private Cloudinary cloudinary;
-
+    
+    @Autowired
+    public UserServiceImpl(UserRepository userRepo /*, ... */) {
+        this.userRepo = userRepo;
+        // ...
+    }
+    
     @Override
     public List<Users> getUsersByKeyword(String kw) {
         return userRepo.getUsersByKeyword(kw);
@@ -98,5 +105,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean authenticate(String username, String password) {
         return this.userRepo.authenticate(username, password);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Users getUserById(Long id) {
+        return userRepo.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Users> getAllTeachers() {
+        // Giả sử role của giảng viên là "TEACHER"
+        return userRepo.findByRole("TEACHER");
     }
 }

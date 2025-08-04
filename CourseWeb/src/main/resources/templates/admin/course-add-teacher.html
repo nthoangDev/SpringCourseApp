@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+  <title>Thêm Giảng viên</title>
+  <!-- Nhúng CSS/JS chung từ base -->
+  <th:block th:replace="base :: bootstrap" />
+</head>
+<body>
+  <!-- Header chung -->
+  <div th:replace="base :: header" />
+
+  <!-- Nội dung chính -->
+  <main class="container mt-4" style="max-width:600px">
+    <h2>Khóa: <span th:text="${course.title}"></span></h2>
+
+    <h4>Giảng viên đã gán</h4>
+    <ul>
+      <li th:each="ct : ${assigned}">
+        <span th:text="${ct.userId.fullName}"></span>
+        <em th:text="${ct.roleDesc}"></em>
+      </li>
+    </ul>
+
+    <h4>Gán giảng viên mới</h4>
+    <form th:action="@{|/admin/courses/${course.courseId}/add-teacher|}" method="post"
+          class="row g-3">
+      <div class="col-8">
+        <label for="teacherSelect" class="form-label">Chọn giảng viên:</label>
+        <select id="teacherSelect" name="teacherId" class="form-select" required>
+          <option disabled selected>-- Chọn --</option>
+          <option th:each="t : ${teachers}"
+                  th:value="${t.userId}"
+                  th:text="${t.fullName}">
+          </option>
+        </select>
+      </div>
+      <div class="col-8">
+        <label for="roleDesc" class="form-label">Vai trò (ví dụ: Chủ nhiệm):</label>
+        <input id="roleDesc" type="text" name="roleDesc" class="form-control" />
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Thêm</button>
+        <a th:href="@{/admin/courses}" class="btn btn-secondary ms-2">Quay lại</a>
+      </div>
+    </form>
+  </main>
+
+  <!-- Footer chung -->
+  <div th:replace="base :: footer" />
+</body>
+</html>

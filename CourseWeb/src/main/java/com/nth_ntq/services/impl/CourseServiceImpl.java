@@ -107,7 +107,7 @@ public class CourseServiceImpl implements CourseService {
         result.put("tags", c.getTagsSet().stream().map(Tags::getName).toList());
 
         // 2. Số lượng bài học và lượt đăng ký
-        result.put("lessonCount", lessonRepo.countByCourse(courseId));
+        result.put("lessonCount", lessonRepo.countByCourseId(courseId));
         result.put("enrollmentCount", enrollmentRepo.countByCourse(courseId));
 
         // 3. Phản hồi người dùng

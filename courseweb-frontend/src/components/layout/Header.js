@@ -14,7 +14,7 @@ const Header = () => {
         let url = endpoint.tags;
 
         let res = await Apis.get(url);
-
+        
         setTags(res.data);
     }
     useEffect(() => {
@@ -38,7 +38,12 @@ const Header = () => {
                                     <Link key={t.tagId} to={`/?tagId=${t.tagId}`} class="dropdown-item">{t.name}</Link>
                                 ))}
                             </NavDropdown>
+                            <Link to="/my-courses" className="px-3 nav-link">
+                                Khóa của tôi
+                            </Link>
                         </Nav>
+
+
                         <Nav>
                             <Nav.Link href="/cart" className="px-2 position-relative d-flex align-items-center gap-2">
                                 <i className="bi bi-cart-fill fs-5"></i>
@@ -87,6 +92,7 @@ const Header = () => {
                                 </>}
 
                         </Nav>
+
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

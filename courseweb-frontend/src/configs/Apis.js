@@ -9,7 +9,8 @@ export const endpoint = {
     "tags": "/tags",
     'register': '/users',
     'login': '/login',
-    'profile': '/secure/profile'
+    'profile': '/secure/profile',
+    'myCourses':'/my-courses'
 
 }
 

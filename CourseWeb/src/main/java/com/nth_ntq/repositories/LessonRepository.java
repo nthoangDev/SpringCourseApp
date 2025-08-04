@@ -21,5 +21,5 @@ public interface LessonRepository {
 
     void deleteLesson(Long id);
 
-    long countByCourse(Long courseId);
+    long countByCourseId(Long courseId);
 }

@@ -10,21 +10,22 @@ export const endpoint = {
     'register': '/users',
     'login': '/login',
     'profile': '/secure/profile',
-    
-    "cart-items": "/secure/cart/unpaid",               
-    "cart-add": "/secure/cart/add",                    
-    cartDelete: (itemId) => `/secure/cart/items/${itemId}`, 
-    "cart-clear": "/secure/cart/clear",               
-    "cart-total": "/secure/cart/total",              
+    'myCourses': '/my-courses',
 
-    "checkout": "/secure/cart/checkout",               
-    "vnpayReturn": "/payment/vnpay_return"    
+    "cart-items": "/secure/cart/unpaid",
+    "cart-add": "/secure/cart/add",
+    cartDelete: (itemId) => `/secure/cart/items/${itemId}`,
+    "cart-clear": "/secure/cart/clear",
+    "cart-total": "/secure/cart/total",
+
+    "checkout": "/secure/cart/checkout",
+    "vnpayReturn": "/payment/vnpay_return"
 
 }
 
 export const authApis = () => axios.create({
     baseURL: BASE_URL,
-    headers:{
+    headers: {
         'Authorization': `Bearer ${cookie.load("token")}`
     }
 });

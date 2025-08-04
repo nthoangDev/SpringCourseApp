@@ -47,7 +47,7 @@ const Login = () => {
 
             cookie.save('user', JSON.stringify(u.data)); 
             let next = q.get("next");
-            console.log(next)
+            // console.log(next)
             nav(next?next:"/");
         } catch (e) {
             console.log(e.message);

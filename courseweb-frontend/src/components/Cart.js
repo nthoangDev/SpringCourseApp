@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Alert, Badge, Button, Card, Col, Container, Row, Spinner } from "react-bootstrap";
-import { MyUserContext } from "../configs/context";
+import { MyCartContext, MyUserContext } from "../configs/context";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { authApis, endpoint } from "../configs/Apis";
 
@@ -12,6 +12,7 @@ const Cart = () => {
     const navigate = useNavigate();
     const [params] = useSearchParams();
     const statusPay = params.get("statusPay");
+    const [, cartDispatch] = useContext(MyCartContext);
 
     const loadCart = async () => {
         try {
@@ -39,7 +40,9 @@ const Cart = () => {
         if (window.confirm("Bạn có chắc muốn xóa khóa học này?")) {
             try {
                 await authApis().delete(`${endpoint.cartDelete(id)}`);
-                setCartItems(prev => prev.filter(item => item.cartItemId !== id));
+                const updatedCart = cartItems.filter(item => item.cartItemId !== id);
+                setCartItems(updatedCart);
+                cartDispatch({ type: "update", payload: updatedCart });
             } catch (err) {
                 console.error("Lỗi xóa mục khỏi giỏ:", err);
             }
@@ -68,8 +71,13 @@ const Cart = () => {
     }
 
     const getTotal = async () => {
-        const res = await authApis().get(endpoint["cart-total"]);
-        setTotal(res.data.total);
+        try {
+            const res = await authApis().get(endpoint["cart-total"]);
+            setTotal(res.data.total);
+        } catch (err) {
+            console.log("Lỗi total: ", err);
+        }
+
     }
 
     useEffect(() => {

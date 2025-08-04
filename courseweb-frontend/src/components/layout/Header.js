@@ -14,7 +14,7 @@ const Header = () => {
         let url = endpoint.tags;
 
         let res = await Apis.get(url);
-
+        
         setTags(res.data);
     }
     useEffect(() => {
@@ -25,9 +25,9 @@ const Header = () => {
         <>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top" className="shadow-sm py-3">
                 <Container>
-                    <Navbar.Brand href="/" className="fw-bold text-uppercase">
+                    <Link to="/" className="fw-bold text-uppercase navbar-brand">
                         Course<span className="text-info">Web</span>
-                    </Navbar.Brand>
+                    </Link>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
@@ -38,17 +38,22 @@ const Header = () => {
                                     <Link key={t.tagId} to={`/?tagId=${t.tagId}`} class="dropdown-item">{t.name}</Link>
                                 ))}
                             </NavDropdown>
+                            <Link to="/my-courses" className="px-3 nav-link">
+                                Khóa của tôi
+                            </Link>
                         </Nav>
+
+
                         <Nav>
-                            <Nav.Link href="/cart" className="px-3 position-relative d-flex align-items-center gap-2">
+                            <Link to="/cart" className="px-3 position-relative d-flex align-items-center gap-2 nav-link">
                                 <i className="bi bi-cart-fill fs-5"></i>
                                 <span>Giỏ hàng</span>
                                 <Badge bg="danger" pill className="position-absolute top-0 start-100 translate-middle">{cartCounter}</Badge>
-                            </Nav.Link>
+                            </Link>
                             {user === null ? <>
 
-                                <Nav.Link href="/login" className="px-2">Đăng nhập</Nav.Link>
-                                <Nav.Link href="/register" className="px-2 btn btn-outline-info rounded-pill">Đăng ký</Nav.Link></> :
+                                <Link to="/login" className="px-2 text-warning nav-link">Đăng nhập</Link>
+                                <Link to="/register" className="px-2 nav-link ">Đăng ký</Link></> :
                                 <>
                                     <Dropdown as={ButtonGroup} align="end" className="ms-3">
                                         <Dropdown.Toggle
@@ -87,6 +92,7 @@ const Header = () => {
                                 </>}
 
                         </Nav>
+
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

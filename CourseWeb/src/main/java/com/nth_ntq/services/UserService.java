@@ -23,4 +23,7 @@ public interface UserService extends UserDetailsService {
     Users addUser(Map<String, String> params, MultipartFile avatar);
 
     boolean authenticate(String username, String password);
+    
+    Users getUserById(Long id);
+    List<Users> getAllTeachers();
 }

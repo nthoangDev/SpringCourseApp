@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Alert, Button, Card, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import Apis, { authApis, endpoint } from "../configs/Apis";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import cookie from 'react-cookies';
 import { MyCartContext } from "../configs/context";
 import MySpinner from "./layout/MySpinner";
@@ -16,6 +16,7 @@ const Home = () => {
     const [sort, setSort] = useState('');
     const [params] = useSearchParams();
     const [, cartDispatch] = useContext(MyCartContext);
+    const nav = useNavigate();
 
     const loadCourses = async () => {
         let url = `${endpoint.courses}?page=${page}`;
@@ -71,30 +72,36 @@ const Home = () => {
 
     useEffect(() => {
         setPage(1);
-    }, [keyword, params,  level, sort]);
+    }, [keyword, params, level, sort]);
 
     const loadMore = () => {
         setPage(page + 1);
     }
 
-   const order = async (course) => {
-    try {
-        let res = await authApis().post(endpoint["cart-add"], {
-            courseId: course.courseId
-        });
+    const order = async (course) => {
+        if (!cookie.load("token")) {
+            alert("Vui lòng đăng nhập để thực hiện tính năng này!");
+            return;
+        }
 
-        if (res.status === 200 || res.status === 201) {
-            alert("Đã thêm vào giỏ hàng!");
-            cartDispatch({ type: "update" });
+        try {
+            let res = await authApis().post(endpoint["cart-add"], {
+                courseId: course.courseId
+            });
+
+            if (res.status === 200 || res.status === 201) {
+                alert("Đã thêm vào giỏ hàng!");
+                const itemsRes = await authApis().get(endpoint["cart-items"]);
+                cartDispatch({ type: "update", payload: itemsRes.data.items });
+            }
+        } catch (err) {
+            if (err.response && err.response.data && err.response.data.error) {
+                alert("Lỗi: " + err.response.data.error);
+            } else {
+                alert("Lỗi: Lỗi khi thêm giỏ hàng");
+            }
         }
-    } catch (err) {
-        if (err.response && err.response.data && err.response.data.error) {
-            alert("Lỗi:  " + err.response.data.error);
-        } else {
-            alert("Lỗi: Lỗi khi thêm giỏ hàng");
-        }
-    }
-}
+    };
 
     return (
         <>
@@ -109,7 +116,7 @@ const Home = () => {
                                 </Col>
                                 <Col xs={6} md={3}>
                                     <Form.Select value={level} onChange={(e) => setLevel(e.target.value)} >
-                                        <option value="">-- Chọn trình độ --</option> 
+                                        <option value="">-- Chọn trình độ --</option>
                                         <option value="BEGINNER">Cơ bản</option>
                                         <option value="INTERMEDIATE">Trung cấp</option>
                                         <option value="ADVANCED">Nâng cao</option>
@@ -154,7 +161,7 @@ const Home = () => {
 
                                             <div className="card-buttons">
                                                 <Link to={`/courses/${c.courseId}`} className="btn btn-primary btn-sm" >Xem chi tiết</Link>
-                                                <Link className="btn btn-success btn-sm"  onClick={()=>order(c)}>Đăng ký</Link>
+                                                <Link className="btn btn-success btn-sm" onClick={() => order(c)}>Đăng ký</Link>
                                             </div>
                                         </Card.Body>
                                     </Card>

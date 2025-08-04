@@ -6,6 +6,7 @@ package com.nth_ntq.repositories.impl;
 
 import com.nth_ntq.pojo.Users;
 import com.nth_ntq.repositories.UserRepository;
+import jakarta.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
@@ -32,6 +33,11 @@ public class UserRepositoryImpl implements UserRepository {
     private LocalSessionFactoryBean factory;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserRepositoryImpl(LocalSessionFactoryBean factory) {
+        this.factory = factory;
+    }
 
     @Override
     public List<Users> getUsersByKeyword(String kw) {
@@ -85,5 +91,19 @@ public class UserRepositoryImpl implements UserRepository {
         return u;
     }
 
-   
+    public Users findById(Long id) {
+        Session s = factory.getObject().getCurrentSession();
+        // s.get() trả về null nếu không tìm thấy
+        return s.get(Users.class, id);
+    }
+
+    @Override
+    public List<Users> findByRole(String role) {
+        Session s = factory.getObject().getCurrentSession();
+        TypedQuery<Users> q = s.createNamedQuery(
+                "Users.findByRole", Users.class
+        );
+        q.setParameter("role", role);
+        return q.getResultList();
+    }
 }

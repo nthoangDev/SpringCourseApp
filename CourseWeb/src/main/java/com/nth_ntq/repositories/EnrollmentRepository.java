@@ -6,6 +6,9 @@ package com.nth_ntq.repositories;
 
 import com.nth_ntq.pojo.Enrollments;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  *
  * @author pc
@@ -17,4 +20,8 @@ public interface EnrollmentRepository {
     long countByCourse(Long courseId);
 
     boolean existsByUserAndCourse(Long userId, Long courseId);
+
+    List<Enrollments> findByUserId(Long userId);
+
+    Optional<Enrollments> findByUserIdAndCourseId(Long userId, Long courseId);
 }

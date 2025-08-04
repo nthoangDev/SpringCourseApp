@@ -8,7 +8,9 @@ import com.nth_ntq.pojo.Enrollments;
 import com.nth_ntq.repositories.EnrollmentRepository;
 import com.nth_ntq.services.EnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
+import java.util.List;
 import org.springframework.stereotype.Service;
 /**
  *
@@ -23,5 +25,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public void save(Enrollments enrollment) {
         enrollmentRepo.save(enrollment);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<Enrollments> getByUserId(Long userId) {
+        return enrollmentRepo.findByUserId(userId);
+        
     }
 }

@@ -2,15 +2,12 @@ import cookie from 'react-cookies';
 
 const MyCartReducer = (current, action) => {
     if (action.type === 'update') {
-        let total = 0;
-        let cart = cookie.load("cart");
-        if (cart){
-            for(let x of Object.values(cart))
-                total += x.quantity;
-
+        const cartItems = action.payload;
+        if (Array.isArray(cartItems)) {
+            return cartItems.length; 
         }
 
-        return total;
+        return 0;
     }
     return current;
 }

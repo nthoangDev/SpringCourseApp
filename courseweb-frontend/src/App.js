@@ -14,6 +14,7 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import MyUserReducer from "./reducers/MyUserReducer";
 import cookie from 'react-cookies';
+import MyCourses from "./components/MyCourses";
 
 function App() {
   let initialUser = cookie.load("user");
@@ -32,6 +33,7 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/my-courses" element={<MyCourses />} />
             </Routes>
 
             <Footer />

@@ -15,6 +15,9 @@ import Login from "./components/Login";
 import MyUserReducer from "./reducers/MyUserReducer";
 import cookie from 'react-cookies';
 import MyCourses from "./components/MyCourses";
+import TeacherClasses from "./components/TeacherClasses";
+import GradeDashboard from "./components/GradeDashboard";
+import UserAssessmentResult from "./components/UserAssessmentResult";
 
 function App() {
   let initialUser = cookie.load("user");
@@ -34,6 +37,10 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/my-courses" element={<MyCourses />} />
+              <Route path="/grade" element={<TeacherClasses />} />
+              <Route path="/grade/:courseId" element={<GradeDashboard />} />
+              <Route path="/result/:courseId" element={<GradeDashboard />} />
+              <Route path="/result/:assessmentId/:userId" element={<UserAssessmentResult />} />
             </Routes>
 
             <Footer />

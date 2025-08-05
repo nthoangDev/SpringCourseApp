@@ -18,4 +18,6 @@ public interface CourseRepository {
     Courses addOrUpdateCourse(Courses c);
     void deleteCourse(Long id);
     long countCourse();
+    List<Courses> findCoursesByTeacherUsername(String username);
+    
 }

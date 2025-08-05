@@ -4,6 +4,7 @@
  */
 package com.nth_ntq.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -73,15 +75,20 @@ public class Assessments implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dueAt;
     @ManyToMany(mappedBy = "assessmentsSet")
+    @JsonIgnore
     private Set<Lessons> lessonsSet;
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Courses courseId;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "assessments")
+    @JsonIgnore
     private Assignments assignments;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "assessments")
+    @JsonIgnore
     private Set<AssessmentResults> assessmentResultsSet;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "assessments")
+    @JsonIgnore
     private Tests tests;
 
     public Assessments() {
@@ -217,5 +224,5 @@ public class Assessments implements Serializable {
     public String toString() {
         return "com.nth_ntq.pojo.Assessments[ assessmentId=" + assessmentId + " ]";
     }
-    
+
 }

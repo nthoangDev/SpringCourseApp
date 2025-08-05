@@ -40,13 +40,13 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private Cloudinary cloudinary;
-    
+
     @Autowired
     public UserServiceImpl(UserRepository userRepo /*, ... */) {
         this.userRepo = userRepo;
         // ...
     }
-    
+
     @Override
     public List<Users> getUsersByKeyword(String kw) {
         return userRepo.getUsersByKeyword(kw);
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
     public boolean authenticate(String username, String password) {
         return this.userRepo.authenticate(username, password);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public Users getUserById(Long id) {
@@ -118,5 +118,10 @@ public class UserServiceImpl implements UserService {
     public List<Users> getAllTeachers() {
         // Giả sử role của giảng viên là "TEACHER"
         return userRepo.findByRole("TEACHER");
+    }
+
+    @Override
+    public List<Users> getStudentsByCourseId(Long courseId) {
+        return userRepo.getStudentsByCourseId(courseId);
     }
 }

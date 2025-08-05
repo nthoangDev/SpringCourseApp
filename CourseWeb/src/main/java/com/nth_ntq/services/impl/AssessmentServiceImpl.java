@@ -39,7 +39,6 @@ public class AssessmentServiceImpl implements AssessmentService {
         return this.assessmentRepo.getById(id);
     }
 
-
     @Override
     public Assessments saveAssessment(AssessmentDTO dto) {
         // Lấy khóa học liên quan
@@ -89,5 +88,10 @@ public class AssessmentServiceImpl implements AssessmentService {
     @Override
     public void delete(Long id) {
         assessmentRepo.deleteAssessment(id);
+    }
+
+    @Override
+    public List<Assessments> getAssessmentsByLessonId(Long lessonId) {
+        return assessmentRepo.getAssessmentsByLessonId(lessonId);
     }
 }

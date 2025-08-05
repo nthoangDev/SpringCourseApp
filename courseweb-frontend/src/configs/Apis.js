@@ -19,7 +19,16 @@ export const endpoint = {
     "cart-total": "/secure/cart/total",
 
     "checkout": "/secure/cart/checkout",
-    "vnpayReturn": "/payment/vnpay_return"
+    "vnpayReturn": "/payment/vnpay_return",
+
+    gradeAssessment: (aid, uid) => `/secure/assessments/${aid}/grade/${uid}`,
+    assessmentResults: (aid) => `/secure/assessments/${aid}/results`,
+    userAssessmentResult: (aid, uid) => `/secure/assessments/${aid}/results/${uid}`,
+
+    "teacher-classes": "/secure/teacher/courses",
+    courseLessons: (id) => `/secure/courses/${id}/lessons`,
+    courseStudents: (id) => `/secure/courses/${id}/students`,
+    lessonAssessment: (id) => `/secure/lessons/${id}/assessments`
 
 }
 

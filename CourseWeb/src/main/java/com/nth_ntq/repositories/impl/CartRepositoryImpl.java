@@ -48,10 +48,11 @@ public class CartRepositoryImpl implements CartRepository {
     }
 
     @Override
-    public void save(Carts cart) {
+    public Carts save(Carts cart) {
         Session s = factory.getObject().getCurrentSession();
 
-        s.merge(cart);
+//        s.merge(cart);
+        return (Carts) s.merge(cart);
 
     }
 }

@@ -6,11 +6,13 @@ package com.nth_ntq.repositories.impl;
 
 import com.nth_ntq.pojo.Assessments;
 import com.nth_ntq.pojo.Assignments;
+import com.nth_ntq.pojo.Lessons;
 import com.nth_ntq.pojo.Tests;
 import com.nth_ntq.repositories.AssessmentRepository;
 import java.util.List;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
@@ -69,15 +71,14 @@ public class AssessmentRepositoryImpl implements AssessmentRepository {
         }
     }
 
-    
     @Override
     public void addAssignment(Assignments a) {
         Session session = this.factory.getObject().getCurrentSession();
 
-        if (a.getAssignmentId()!= null) {
-            session.merge(a);  
+        if (a.getAssignmentId() != null) {
+            session.merge(a);
         } else {
-            session.persist(a); 
+            session.persist(a);
         }
     }
 
@@ -86,9 +87,25 @@ public class AssessmentRepositoryImpl implements AssessmentRepository {
         Session session = this.factory.getObject().getCurrentSession();
 
         if (t.getTestId() != null) {
-            session.merge(t);  
+            session.merge(t);
         } else {
-            session.persist(t); 
+            session.persist(t);
         }
+    }
+
+    @Override
+    public List<Assessments> getAssessmentsByLessonId(Long lessonId) {
+        Session s = factory.getObject().getCurrentSession();
+        CriteriaBuilder cb = s.getCriteriaBuilder();
+        CriteriaQuery<Assessments> cq = cb.createQuery(Assessments.class);
+
+        Root<Lessons> lessonRoot = cq.from(Lessons.class);
+        Join<Lessons, Assessments> join = lessonRoot.join("assessmentsSet");
+
+        cq.select(join)
+                .where(cb.equal(lessonRoot.get("lessonId"), lessonId))
+                .distinct(true);
+
+        return s.createQuery(cq).getResultList();
     }
 }

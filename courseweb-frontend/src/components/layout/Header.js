@@ -14,7 +14,7 @@ const Header = () => {
         let url = endpoint.tags;
 
         let res = await Apis.get(url);
-        
+
         setTags(res.data);
     }
     useEffect(() => {
@@ -41,6 +41,10 @@ const Header = () => {
                             <Link to="/my-courses" className="px-3 nav-link">
                                 Khóa của tôi
                             </Link>
+
+                            {user?.role === "TEACHER" && (
+                                <Link to="/grade" className="px-3 nav-link">Chấm điểm</Link>
+                            )}
                         </Nav>
 
 

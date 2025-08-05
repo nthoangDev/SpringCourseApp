@@ -14,6 +14,6 @@ public interface CartRepository {
 
     Carts findByUserId(Long userId);
 
-    void save(Carts cart);
+    Carts save(Carts cart);
 
 }

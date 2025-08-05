@@ -127,4 +127,8 @@ public class CourseServiceImpl implements CourseService {
         return result;
     }
 
+    @Override
+    public List<Courses> getCoursesByTeacherUsername(String username) {
+        return courseRepo.findCoursesByTeacherUsername(username);
+    }
 }

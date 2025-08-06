@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Apis, { endpoint } from "../configs/Apis";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Container, Row, Col, Card, ListGroup, Spinner, Alert, } from "react-bootstrap";
+import CertificatePanel from "./CertificatePanel";
+import MySpinner from "./layout/MySpinner";
 
 function CourseDetail() {
     const [courseData, setCourseData] = useState(null);
     const [loading, setLoading] = useState(false);
     const { id } = useParams();
+    const location = useLocation();
+
+    const isEnrolled = location.state?.isEnrolled || false;
 
     const loadCourseDetail = async () => {
 
@@ -16,7 +21,7 @@ function CourseDetail() {
             let url = `${endpoint.courseDetail(id)}`
             console.log(url)
             let res = await Apis.get(url);
-                        console.log(res.data)
+            // console.log(res.data)
             setCourseData(res.data);
         } catch (e) {
             console.error("Lỗi load course detail:", e);
@@ -31,7 +36,7 @@ function CourseDetail() {
 
     }, [id]);
 
-    if (loading || !courseData) return <Spinner animation="border" variant="info" />;
+    if (loading || !courseData) return <MySpinner />;
 
     const { course, tags, lessonCount, enrollmentCount, feedback } = courseData;
 
@@ -54,6 +59,12 @@ function CourseDetail() {
                                 <ListGroup.Item><strong>Số bài học:</strong> {lessonCount}</ListGroup.Item>
                                 <ListGroup.Item><strong>Tags:</strong> {tags.join(", ")}</ListGroup.Item>
                             </ListGroup>
+
+                            {isEnrolled && (
+                                <div className="mt-3">
+                                    <CertificatePanel courseId={course.courseId} isEnrolled={true} />
+                                </div>
+                            )}
                         </Card.Body>
                     </Col>
                 </Row>

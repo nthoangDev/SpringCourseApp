@@ -1,7 +1,8 @@
-// src/components/MyCourses.js
-import React, { useEffect, useState } from "react";
-import Apis, { endpoint, authApis } from "../configs/Apis";
-import { Container, Row, Col, Card, Button, Spinner, Alert } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { endpoint, authApis } from "../configs/Apis";
+import { Container, Row, Col, Card, Spinner, Alert } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import MySpinner from "./layout/MySpinner";
 
 export default function MyCourses() {
     const [courses, setCourses] = useState([]);
@@ -34,7 +35,7 @@ export default function MyCourses() {
     }, []);
 
     if (loading) {
-        return <Container className="text-center mt-5"><Spinner animation="border" /></Container>;
+        return <Container className="text-center mt-5"> <MySpinner/> </Container>;
     }
     if (error) {
         return <Container className="mt-5"><Alert variant="warning">{error}</Alert></Container>;
@@ -59,14 +60,9 @@ export default function MyCourses() {
                             <Card.Body>
                                 <Card.Title>{c.title}</Card.Title>
                                 <Card.Text className="text-truncate">{c.description}</Card.Text>
-                                <Button
-                                    variant="primary"
-                                    onClick={() =>
-                                        window.location.href = `/CourseWeb/courses/${c.courseId}/content`
-                                    }
-                                >
+                                <Link variant="primary" to={`/courses/${c.courseId}`} state={{ isEnrolled: true }}>
                                     Xem nội dung
-                                </Button>
+                                </Link>
                             </Card.Body>
                         </Card>
                     </Col>

@@ -25,7 +25,7 @@ const UserAssessmentResult = ({ assessmentId, userId }) => {
     if (assessmentId && userId) fetchResult();
   }, [assessmentId, userId]);
 
-  if (loading) return <MySpinner/>;
+  if (loading) return <MySpinner />;
   if (error) return <Alert variant="danger">{error}</Alert>;
   if (!result) return <p>Chưa có kết quả đánh giá.</p>;
 

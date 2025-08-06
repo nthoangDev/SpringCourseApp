@@ -27,7 +27,9 @@ export const endpoint = {
     "teacher-classes": "/secure/teacher/courses",
     courseLessons: (id) => `/secure/courses/${id}/lessons`,
     courseStudents: (id) => `/secure/courses/${id}/students`,
-    lessonAssessment: (id) => `/secure/lessons/${id}/assessments`
+    lessonAssessment: (id) => `/secure/lessons/${id}/assessments`,
+
+    generateCertificate: (courseId) => `/secure/certificates/generate/${courseId}`
 
 }
 

@@ -40,19 +40,8 @@ public class ApiCertificateController {
     public ResponseEntity<?> generateCertificate(@PathVariable(value = "courseId") Long courseId, HttpServletRequest request) {
         String username = (String) request.getAttribute("username");
         Users u = userService.getUserByUsername(username);
-        Certificates cert = certificateService.generateCertificate(u.getUserId(), courseId);
-        return ResponseEntity.ok(cert);
-    }
-
-    @GetMapping("/secure/certificates/my/{courseId}")
-    public ResponseEntity<?> getCertificate(@PathVariable(value = "courseId") Long courseId, HttpServletRequest request) {
-        String username = (String) request.getAttribute("username");
-        Users u = userService.getUserByUsername(username);
-
         Certificates cert = certificateService.getCertificateByUserAndCourse(u.getUserId(), courseId);
-        if (cert == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Chưa có chứng chỉ");
-        }
         return ResponseEntity.ok(cert);
     }
+
 }

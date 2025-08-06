@@ -22,7 +22,6 @@ export const endpoint = {
     "vnpayReturn": "/payment/vnpay_return",
 
     gradeAssessment: (aid, uid) => `/secure/assessments/${aid}/grade/${uid}`,
-    assessmentResults: (aid) => `/secure/assessments/${aid}/results`,
     userAssessmentResult: (aid, uid) => `/secure/assessments/${aid}/results/${uid}`,
 
     "teacher-classes": "/secure/teacher/courses",

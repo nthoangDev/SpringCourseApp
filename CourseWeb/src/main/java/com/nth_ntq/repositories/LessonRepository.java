@@ -22,4 +22,6 @@ public interface LessonRepository {
     void deleteLesson(Long id);
 
     long countByCourseId(Long courseId);
+
+    long countCompletedLessonsByUser(Long userId, Long courseId);
 }

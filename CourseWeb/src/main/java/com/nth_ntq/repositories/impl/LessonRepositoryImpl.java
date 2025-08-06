@@ -8,6 +8,8 @@ import com.nth_ntq.pojo.Lessons;
 import com.nth_ntq.repositories.LessonRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
 import org.hibernate.Session;
@@ -77,4 +79,31 @@ public class LessonRepositoryImpl implements LessonRepository {
         q.setParameter("cid", courseId);
         return q.getSingleResult();
     }
+
+    @Override
+    public long countCompletedLessonsByUser(Long userId, Long courseId) {
+        Session session = factory.getObject().getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+
+        // FROM Lessons l
+        Root<Lessons> lessonRoot = cq.from(Lessons.class);
+        Join<Object, Object> assessmentJoin = lessonRoot.join("assessmentsSet");
+        Join<Object, Object> resultJoin = assessmentJoin.join("assessmentResultsSet");
+
+        // SELECT COUNT(DISTINCT l.lessonId)
+        cq.select(cb.countDistinct(lessonRoot.get("lessonId")));
+
+        // WHERE l.courseId.courseId = :courseId
+        //   AND ar.userId.userId = :userId
+        //   AND ar.score >= 5
+        Predicate byCourse = cb.equal(lessonRoot.get("courseId").get("courseId"), courseId);
+        Predicate byUser = cb.equal(resultJoin.get("users").get("userId"), userId);
+        Predicate byScore = cb.ge(resultJoin.get("score"), 5);
+
+        cq.where(cb.and(byCourse, byUser, byScore));
+
+        return session.createQuery(cq).getSingleResult();
+    }
+
 }

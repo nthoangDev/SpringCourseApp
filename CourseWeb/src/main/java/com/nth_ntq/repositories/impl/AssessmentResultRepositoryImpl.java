@@ -7,6 +7,10 @@ package com.nth_ntq.repositories.impl;
 import com.nth_ntq.pojo.AssessmentResults;
 import com.nth_ntq.pojo.AssessmentResultsPK;
 import com.nth_ntq.repositories.AssessmentResultRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -49,5 +53,24 @@ public class AssessmentResultRepositoryImpl implements AssessmentResultRepositor
             s.merge(r);
         }
         return r;
+    }
+
+    @Override
+    public AssessmentResults findByUserAndAssessment(Long userId, Long assessmentId) {
+        Session session = factory.getObject().getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<AssessmentResults> cq = cb.createQuery(AssessmentResults.class);
+
+        Root<AssessmentResults> root = cq.from(AssessmentResults.class);
+
+        Predicate byUser = cb.equal(root.get("users").get("userId"), userId);
+        Predicate byAssessment = cb.equal(root.get("assessments").get("assessmentId"), assessmentId);
+
+        cq.select(root).where(cb.and(byUser, byAssessment));
+
+        Query<AssessmentResults> query = session.createQuery(cq);
+        List<AssessmentResults> result = query.getResultList();
+
+        return result.isEmpty() ? null : result.get(0);
     }
 }

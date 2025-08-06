@@ -7,14 +7,17 @@ package com.nth_ntq.repositories;
 import com.nth_ntq.pojo.AssessmentResults;
 import java.util.List;
 
-
-
 /**
  *
  * @author pc
  */
 public interface AssessmentResultRepository {
+
     List<AssessmentResults> getResultsByAssessment(Long assessmentId);
+
     AssessmentResults getResult(Long assessmentId, Long userId);
+
     AssessmentResults save(AssessmentResults r);
+
+    AssessmentResults findByUserAndAssessment(Long userId, Long assessmentId);
 }

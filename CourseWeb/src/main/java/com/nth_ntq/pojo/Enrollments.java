@@ -32,39 +32,39 @@ import java.util.Date;
     @NamedQuery(name = "Enrollments.findByEnrollmentId", query = "SELECT e FROM Enrollments e WHERE e.enrollmentId = :enrollmentId"),
     @NamedQuery(name = "Enrollments.findByProgress", query = "SELECT e FROM Enrollments e WHERE e.progress = :progress"),
     @NamedQuery(name = "Enrollments.findByCompleted", query = "SELECT e FROM Enrollments e WHERE e.completed = :completed"),
-    @NamedQuery(name = "Enrollments.findByEnrolledAt", query = "SELECT e FROM Enrollments e WHERE e.enrolledAt = :enrolledAt")})
+    @NamedQuery(name = "Enrollments.findByEnrolledAt", query = "SELECT e FROM Enrollments e WHERE e.enrolledAt = :enrolledAt")
+})
 public class Enrollments implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "enrollment_id")
     private Long enrollmentId;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+
     @Column(name = "progress")
     private BigDecimal progress;
+
     @Column(name = "completed")
     private Boolean completed;
+
     @Column(name = "enrolled_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date enrolledAt;
+
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @ManyToOne(optional = false)
     private Courses courseId;
+
     @JoinColumn(name = "payment_id", referencedColumnName = "payment_id")
     @ManyToOne
     private Payments paymentId;
+
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
     private Users userId;
 
-    public Enrollments() {
-    }
-
-    public Enrollments(Long enrollmentId) {
-        this.enrollmentId = enrollmentId;
-    }
+    // Constructors, hashCode, equals, toString...
 
     public Long getEnrollmentId() {
         return enrollmentId;
@@ -122,33 +122,17 @@ public class Enrollments implements Serializable {
         this.userId = userId;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (enrollmentId != null ? enrollmentId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Enrollments)) {
-            return false;
-        }
-        Enrollments other = (Enrollments) object;
-        if ((this.enrollmentId == null && other.enrollmentId != null) || (this.enrollmentId != null && !this.enrollmentId.equals(other.enrollmentId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.nth_ntq.pojo.Enrollments[ enrollmentId=" + enrollmentId + " ]";
-    }
-
+    // Thực thi kiểm tra completed dựa trên field Boolean completed. Tránh NULL
     public boolean isCompleted() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Boolean.TRUE.equals(this.completed);
     }
-    
+
+    // Getter và setter cho userId và courseId
+    public Users getUser() {
+        return userId;
+    }
+
+    public void setUser(Users user) {
+        this.userId = user;
+    }
 }

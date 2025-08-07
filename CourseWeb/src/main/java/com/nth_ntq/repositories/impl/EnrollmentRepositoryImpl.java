@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import org.hibernate.SessionFactory;
 
 /**
  *
@@ -25,6 +26,8 @@ import java.util.Optional;
 @Transactional
 public class EnrollmentRepositoryImpl implements EnrollmentRepository {
 
+    @Autowired
+    private SessionFactory sessionFactory;
     @Autowired
     private LocalSessionFactoryBean factory;
 
@@ -55,7 +58,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     public boolean existsByUserAndCourse(Long userId, Long courseId
     ) {
         Session s = factory.getObject().getCurrentSession();
-        Query<Long> q = s.createQuery("SELECT COUNT(*) FROM Enrollments e WHERE e.userId.userId = :uid AND e.course.courseId = :cid", Long.class);
+        Query<Long> q = s.createQuery("SELECT COUNT(*) FROM Enrollments e WHERE e.userId.userId = :uid AND e.courseId.courseId = :cid", Long.class);
         q.setParameter("uid", userId);
         q.setParameter("cid", courseId);
         return q.getSingleResult() > 0;
@@ -91,4 +94,25 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
         }
         return Optional.of(list.get(0));
     }
+
+    @Override
+    public List<Enrollments> findByCompletedFalse() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery(
+                "FROM Enrollments e WHERE e.completed = false", Enrollments.class)
+                .list();
+    }
+
+    @Override
+    public List<Enrollments> findPendingByUsername(String username) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery(
+                "FROM Enrollments e "
+                + "WHERE e.user.username = :user "
+                + "  AND e.completed = false",
+                Enrollments.class)
+                .setParameter("user", username)
+                .list();
+    }
+
 }

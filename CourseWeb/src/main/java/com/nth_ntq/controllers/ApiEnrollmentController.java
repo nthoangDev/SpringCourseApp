@@ -36,7 +36,7 @@ public class ApiEnrollmentController {
         this.userService = userService;
     }
 
-    @GetMapping("/my-courses")
+    @GetMapping("/secure/my-courses")
     public ResponseEntity<?> myCourses(Principal principal) {
         LOGGER.info("==> /api/my-courses called, principal = {}", principal);
 

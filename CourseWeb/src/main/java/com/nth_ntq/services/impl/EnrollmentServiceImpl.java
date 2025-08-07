@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
+
 /**
  *
  * @author pc
@@ -26,11 +28,30 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     public void save(Enrollments enrollment) {
         enrollmentRepo.save(enrollment);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public List<Enrollments> getByUserId(Long userId) {
         return enrollmentRepo.findByUserId(userId);
-        
+
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Enrollments> findByUserIdAndCourseId(Long userId, Long courseId) {
+        return enrollmentRepo.findByUserIdAndCourseId(userId, courseId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Enrollments> findPendingEnrollments() {
+        return enrollmentRepo.findByCompletedFalse();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Enrollments> findPendingByUsername(String username) {
+        return enrollmentRepo.findPendingByUsername(username);
+    }
+
 }

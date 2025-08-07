@@ -24,4 +24,8 @@ public interface EnrollmentRepository {
     List<Enrollments> findByUserId(Long userId);
 
     Optional<Enrollments> findByUserIdAndCourseId(Long userId, Long courseId);
+
+    List<Enrollments> findByCompletedFalse();
+
+   List<Enrollments> findPendingByUsername(String username);
 }

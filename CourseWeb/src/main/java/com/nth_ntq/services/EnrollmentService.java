@@ -10,7 +10,7 @@ package com.nth_ntq.services;
 
 import com.nth_ntq.pojo.Enrollments;
 import java.util.List;
-
+import java.util.Optional;
 
 /**
  *
@@ -21,4 +21,11 @@ public interface EnrollmentService {
     void save(Enrollments enrollment);
 
     List<Enrollments> getByUserId(Long userId);
+
+    List<Enrollments> findPendingEnrollments();
+
+    Optional<Enrollments> findByUserIdAndCourseId(Long userId, Long courseId);
+
+    List<Enrollments> findPendingByUsername(String username);
+
 }

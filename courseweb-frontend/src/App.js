@@ -6,9 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import "./App.css";
 import CourseDetail from "./components/CourseDetail";
-import { MyCartContext, MyUserContext } from "./configs/context";
+import { MyCartContext, MyUserContext, MyNotificationContext } from "./configs/context";
 import { useReducer } from "react";
 import MyCartReducer from "./reducers/MyCartReducer";
+import MyNotificationReducer from "./reducers/MyNotificationReducer";
 import Cart from "./components/Cart";
 import Register from "./components/Register";
 import Login from "./components/Login";
@@ -17,16 +18,17 @@ import cookie from 'react-cookies';
 import MyCourses from "./components/MyCourses";
 
 function App() {
-  let initialUser = cookie.load("user");
-  let [cartCounter, cartDispatch] = useReducer(MyCartReducer, 0);
-  let [user, dispatch] = useReducer(MyUserReducer, initialUser || null);
+  const initialUser = cookie.load("user");
+  const [cartCounter, cartDispatch]         = useReducer(MyCartReducer, 0);
+  const [user, dispatchUser]                = useReducer(MyUserReducer, initialUser || null);
+  const [reminderCount, reminderDispatch]   = useReducer(MyNotificationReducer, 0);
+
   return (
-    <>
-      <MyUserContext.Provider value={[user, dispatch]}>
-        <MyCartContext.Provider value={[cartCounter, cartDispatch]}>
+    <MyUserContext.Provider value={[user, dispatchUser]}>
+      <MyCartContext.Provider value={[cartCounter, cartDispatch]}>
+        <MyNotificationContext.Provider value={[reminderCount, reminderDispatch]}>
           <BrowserRouter>
             <Header />
-
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/courses/:id" element={<CourseDetail />} />
@@ -35,14 +37,11 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/my-courses" element={<MyCourses />} />
             </Routes>
-
             <Footer />
           </BrowserRouter>
-
-        </MyCartContext.Provider>
-      </MyUserContext.Provider>
-
-    </>
+        </MyNotificationContext.Provider>
+      </MyCartContext.Provider>
+    </MyUserContext.Provider>
   );
 }
 

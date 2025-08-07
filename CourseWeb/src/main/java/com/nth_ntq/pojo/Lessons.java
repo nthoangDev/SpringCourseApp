@@ -4,6 +4,7 @@
  */
 package com.nth_ntq.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -66,9 +67,11 @@ public class Lessons implements Serializable {
         @JoinColumn(name = "lesson_id", referencedColumnName = "lesson_id")}, inverseJoinColumns = {
         @JoinColumn(name = "assessment_id", referencedColumnName = "assessment_id")})
     @ManyToMany
+    @JsonIgnore
     private Set<Assessments> assessmentsSet = new HashSet<>();
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Courses courseId;
 
     public Lessons() {

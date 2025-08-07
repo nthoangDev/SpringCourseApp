@@ -19,4 +19,5 @@ public interface CourseService {
     void deleteCourse(Long id);
     long countCourse();
     Map<String, Object> getCourseDetail(Long courseId);
+    List<Courses> getCoursesByTeacherUsername(String username);
 }

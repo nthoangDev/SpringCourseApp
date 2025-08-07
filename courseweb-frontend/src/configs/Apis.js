@@ -19,14 +19,30 @@ export const endpoint = {
   cartDelete: (itemId) => `/secure/cart/items/${itemId}`,
   "cart-clear": "/secure/cart/clear",
   "cart-total": "/secure/cart/total",
-  checkout: "/secure/cart/checkout",
-  vnpayReturn: "/payment/vnpay_return",
+  // checkout: "/secure/cart/checkout",
+  // vnpayReturn: "/payment/vnpay_return",
+
 
   // Notifications
-  reminderCount: "/secure/notifications/reminder/count", 
+  reminderCount: "/secure/notifications/reminder/count",
   notifications: "/secure/notifications",
   studyReminder: (courseId) => `/secure/notifications/study-reminder/${courseId}`,
+
+  "checkout": "/secure/cart/checkout",
+  "vnpayReturn": "/payment/vnpay_return",
+
+  gradeAssessment: (aid, uid) => `/secure/assessments/${aid}/grade/${uid}`,
+  userAssessmentResult: (aid, uid) => `/secure/assessments/${aid}/results/${uid}`,
+
+  "teacher-classes": "/secure/teacher/courses",
+  courseLessons: (id) => `/secure/courses/${id}/lessons`,
+  courseStudents: (id) => `/secure/courses/${id}/students`,
+  lessonAssessment: (id) => `/secure/lessons/${id}/assessments`,
+
+  generateCertificate: (courseId) => `/secure/certificates/generate/${courseId}`,
+
 };
+
 
 // Tạo axios instance với Authorization
 export const authApis = () =>

@@ -4,8 +4,10 @@
  */
 package com.nth_ntq.repositories.impl;
 
+import com.nth_ntq.pojo.CourseTeachers;
 import com.nth_ntq.pojo.Courses;
 import com.nth_ntq.pojo.Tags;
+import com.nth_ntq.pojo.Users;
 import com.nth_ntq.repositories.CourseRepository;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -128,6 +130,23 @@ public class CourseRepositoryImpl implements CourseRepository {
         Session s = factory.getObject().getCurrentSession();
         Query q = s.createQuery("SELECT COUNT(*) FROM Courses", Courses.class);
         return (long) q.getSingleResult();
+    }
+
+    @Override
+    public List<Courses> findCoursesByTeacherUsername(String username) {
+        Session s = factory.getObject().getCurrentSession();
+        CriteriaBuilder cb = s.getCriteriaBuilder();
+        CriteriaQuery<Courses> cq = cb.createQuery(Courses.class);
+
+        Root<CourseTeachers> root = cq.from(CourseTeachers.class);
+        Join<CourseTeachers, Courses> courseJoin = root.join("courseId");
+        Join<CourseTeachers, Users> teacherJoin = root.join("userId");
+
+        cq.select(courseJoin)
+                .where(cb.equal(teacherJoin.get("username"), username))
+                .distinct(true);
+
+        return s.createQuery(cq).getResultList();
     }
 
 }

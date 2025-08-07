@@ -26,4 +26,6 @@ public interface UserService extends UserDetailsService {
     
     Users getUserById(Long id);
     List<Users> getAllTeachers();
+    
+    List<Users> getStudentsByCourseId(Long courseId);
 }

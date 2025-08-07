@@ -20,19 +20,29 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @Service
 public class ProgressServiceImpl implements ProgressService {
-    @Autowired private LessonRepository lessonRepo;
-    @Autowired private EnrollmentRepository enrollRepo;
+
+    @Autowired
+    private LessonRepository lessonRepo;
+    @Autowired
+    private EnrollmentRepository enrollRepo;
 
     @Override
     public ProgressDTO getProgress(Long userId, Long courseId) {
+        // Tổng số bài học trong khóa
         long total = lessonRepo.countByCourseId(courseId);
-        Enrollments en = enrollRepo
-            .findByUserIdAndCourseId(userId, courseId)
-            .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Chưa ghi danh vào khóa này"));
-        double pct = en.getProgress().doubleValue();
-        long done = Math.round(total * pct / 100.0);
-        return new ProgressDTO(done, total, pct, en.isCompleted());
-    }
-}
+        // Số bài học học viên đã hoàn thành
+        long done = lessonRepo.countCompletedLessonsByUser(userId, courseId);
 
+        // Tính tỉ lệ hoàn thành (nếu không có bài thì xem là 100%)
+        double pct = (total == 0)
+                ? 100.0
+                : (done * 100.0 / total);
+
+        // Xem đã hoàn thành khóa (tất cả bài học) hay chưa
+        boolean completed = (done == total);
+
+        // Trả về DTO (constructor: done, total, pct, completed)
+        return new ProgressDTO(done, total, pct, completed);
+    }
+
+}

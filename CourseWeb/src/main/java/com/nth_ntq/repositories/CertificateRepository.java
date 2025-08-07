@@ -4,16 +4,14 @@
  */
 package com.nth_ntq.repositories;
 
-import com.nth_ntq.pojo.Carts;
+import com.nth_ntq.pojo.Certificates;
+
 
 /**
  *
  * @author pc
  */
-public interface CartRepository {
-
-    Carts findByUserId(Long userId);
-
-    Carts save(Carts cart);
-
+public interface CertificateRepository {
+    Certificates findByUserAndCourse(Long userId, Long courseId);
+    void save(Certificates cert);
 }

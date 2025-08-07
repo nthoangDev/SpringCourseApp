@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { Badge, ButtonGroup, Container, Dropdown, Nav, Navbar, NavDropdown, Spinner } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Apis, { authApis, endpoint } from "../../configs/Apis";
 import { MyCartContext, MyUserContext, MyNotificationContext } from "../../configs/context";
 import cookie from 'react-cookies';
 
 const Header = () => {
-  const { id: courseId } = useParams();
+  const location = useLocation();
+  const tagsPathMatch = location.pathname.match(/^\/?/); // preserved for future use
   const [tags, setTags] = useState([]);
   const [cartCounter] = useContext(MyCartContext);
   const [user, dispatch] = useContext(MyUserContext);
@@ -15,8 +16,12 @@ const Header = () => {
   const [loading, setLoading] = useState(false);
 
   const loadTags = async () => {
-    const res = await Apis.get(endpoint.tags);
-    setTags(res.data);
+    try {
+      const res = await Apis.get(endpoint.tags);
+      setTags(res.data);
+    } catch (err) {
+      console.error("Lỗi khi tải tags:", err);
+    }
   };
 
   const loadNotifications = async () => {
@@ -107,7 +112,11 @@ const Header = () => {
                         e.preventDefault();
                         e.stopPropagation();
                         try {
-                          await authApis().post(endpoint.studyReminder(courseId));
+                          const courseMatch = location.pathname.match(/^\/courses\/(\d+)/);
+                          if (courseMatch) {
+                            const cid = courseMatch[1];
+                            await authApis().post(endpoint.studyReminder(cid));
+                          }
                         } catch (err) {
                           console.error("Lỗi gửi study reminder:", err);
                         }

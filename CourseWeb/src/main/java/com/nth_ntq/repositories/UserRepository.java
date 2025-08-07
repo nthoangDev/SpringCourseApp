@@ -19,4 +19,5 @@ public interface UserRepository {
    Users getUserById(Long userId);
    Users findById(Long id);
    List<Users> findByRole(String role);
+   List<Users> getStudentsByCourseId(Long courseId);
 }

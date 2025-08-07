@@ -116,7 +116,7 @@ public class CartServiceImpl implements CartService {
             cart = new Carts();
             cart.setUserId(user);
             cart.setCreatedAt(new Date());
-            cartRepo.save(cart);
+            cart = cartRepo.save(cart);
         }
 
         // 3 Kiểm tra xem khóa học đã có trong cart chưa

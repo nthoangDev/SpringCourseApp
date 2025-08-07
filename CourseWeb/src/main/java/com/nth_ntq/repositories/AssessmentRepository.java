@@ -26,5 +26,7 @@ public interface AssessmentRepository {
     void addAssignment(Assignments a);
 
     void addTest(Tests t);
+    
+    List<Assessments> getAssessmentsByLessonId(Long lessonId);
 
 }

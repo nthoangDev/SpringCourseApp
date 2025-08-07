@@ -17,4 +17,5 @@ public interface AssessmentService {
     List<Assessments> getAssessmentsByCourseId(Long courseId);
     Assessments getById(Long id);
     void delete(Long id);
+    List<Assessments> getAssessmentsByLessonId(Long lessonId);
 }

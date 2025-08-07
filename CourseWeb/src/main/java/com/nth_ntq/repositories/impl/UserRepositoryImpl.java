@@ -4,6 +4,8 @@
  */
 package com.nth_ntq.repositories.impl;
 
+import com.nth_ntq.pojo.Courses;
+import com.nth_ntq.pojo.Enrollments;
 import com.nth_ntq.pojo.Users;
 import com.nth_ntq.repositories.UserRepository;
 import jakarta.persistence.TypedQuery;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -105,5 +108,20 @@ public class UserRepositoryImpl implements UserRepository {
         );
         q.setParameter("role", role);
         return q.getResultList();
+    }
+
+    @Override
+    public List<Users> getStudentsByCourseId(Long courseId) {
+        Session s = factory.getObject().getCurrentSession();
+        CriteriaBuilder cb = s.getCriteriaBuilder();
+        CriteriaQuery<Users> cq = cb.createQuery(Users.class);
+
+        Root<Enrollments> root = cq.from(Enrollments.class);
+        Join<Enrollments, Users> userJoin = root.join("userId");
+        Join<Enrollments, Courses> courseJoin = root.join("courseId");
+
+        cq.select(userJoin).where(cb.equal(courseJoin.get("courseId"), courseId)).distinct(true);
+
+        return s.createQuery(cq).getResultList();
     }
 }
